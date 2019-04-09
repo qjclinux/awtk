@@ -1105,8 +1105,6 @@ ret_t canvas_draw_image_matrix(canvas_t* c, bitmap_t* img, matrix_t* matrix) {
 
   info.img = img;
   info.matrix = *matrix;
-  info.src = rect_init(0, 0, img->w, img->h);
-  info.dst = rect_init(0, 0, img->w, img->h);
   info.clip = rect_init(c->clip_left, c->clip_top, c->clip_right - c->clip_left,
                         c->clip_bottom - c->clip_top);
 

@@ -182,23 +182,14 @@ static ret_t lcd_mem_draw_glyph(lcd_t* lcd, glyph_t* glyph, rect_t* src, xy_t x,
 }
 
 static ret_t lcd_mem_draw_image_matrix(lcd_t* lcd, draw_image_info_t* info) {
-  matrix_t* m = &(info->matrix);
-  rect_t* s = &(info->src);
-  rect_t* d = &(info->dst);
+#ifdef WITH_PIXMAN
+  bitmap_t fb;
+  lcd_mem_init_drawing_fb(lcd, &fb);
+  return pixman_draw_image_matrix(&fb, info);
+#else
   vgcanvas_t* canvas = lcd_get_vgcanvas(lcd);
-
-  if (canvas != NULL) {
-    rect_t r = info->clip;
-    vgcanvas_save(canvas);
-    vgcanvas_clip_rect(canvas, r.x, r.y, r.w, r.h);
-    vgcanvas_set_transform(canvas, m->a0, m->a1, m->a2, m->a3, m->a4, m->a5);
-    vgcanvas_draw_image(canvas, info->img, s->x, s->y, s->w, s->h, d->x, d->y, d->w, d->h);
-    vgcanvas_restore(canvas);
-
-    return RET_OK;
-  }
-
-  return RET_NOT_IMPL;
+  return vgcanvas_draw_image_matrix(canvas, info);
+#endif /*WITH_PIXMAN*/
 }
 
 static ret_t lcd_mem_draw_image(lcd_t* lcd, bitmap_t* img, rect_t* src, rect_t* dst) {

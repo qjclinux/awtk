@@ -19,6 +19,7 @@ SConscriptFiles=awtk.NANOVG_BACKEND_PROJS + [
   '3rd/libunibreak/SConscript',
   'src/SConscript',
   'tools/common/SConscript', 
+  'tools/pixman/SConscript', 
   'tools/theme_gen/SConscript', 
   'tools/font_gen/SConscript', 
   'tools/image_gen/SConscript', 

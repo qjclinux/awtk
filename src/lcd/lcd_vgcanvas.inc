@@ -149,16 +149,9 @@ static ret_t lcd_vgcanvas_draw_image(lcd_t* lcd, bitmap_t* img, rect_t* src, rec
 }
 
 static ret_t lcd_vgcanvas_draw_image_matrix(lcd_t* lcd, draw_image_info_t* info) {
-  matrix_t* m = &(info->matrix);
-  rect_t* s = &(info->src);
-  rect_t* d = &(info->dst);
-  vgcanvas_t* canvas = LCD(lcd)->canvas;
-  vgcanvas_save(canvas);
-  vgcanvas_set_transform(canvas, m->a0, m->a1, m->a2, m->a3, m->a4, m->a5);
-  vgcanvas_draw_image(canvas, info->img, s->x, s->y, s->w, s->h, d->x, d->y, d->w, d->h);
-  vgcanvas_restore(canvas);
+  vgcanvas_t* canvas = lcd_get_vgcanvas(lcd);
 
-  return RET_OK;
+  return vgcanvas_draw_image_matrix(canvas, info);
 }
 
 #define MAX_CHARS 256

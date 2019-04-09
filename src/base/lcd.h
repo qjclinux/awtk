@@ -27,16 +27,9 @@
 #include "tkc/matrix.h"
 #include "base/bitmap.h"
 #include "base/vgcanvas.h"
+#include "base/draw_image_matrix.h"
 
 BEGIN_C_DECLS
-
-typedef struct _draw_image_info_t {
-  bitmap_t* img;
-  rect_t src;
-  rect_t dst;
-  rect_t clip;
-  matrix_t matrix;
-} draw_image_info_t;
 
 struct _lcd_t;
 typedef struct _lcd_t lcd_t;
