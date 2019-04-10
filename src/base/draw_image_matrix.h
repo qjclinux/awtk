@@ -35,8 +35,6 @@ typedef struct _draw_image_info_t {
   matrix_t matrix;
 } draw_image_info_t;
 
-#define WITH_PIXMAN 1
-
 #ifdef WITH_PIXMAN
 ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info);
 #endif /*WITH_PIXMAN*/

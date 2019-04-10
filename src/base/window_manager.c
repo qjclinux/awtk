@@ -548,6 +548,30 @@ static ret_t window_manager_update_cursor(widget_t* widget, int32_t x, int32_t y
   return RET_OK;
 }
 
+#define PAINT_MEASURE
+
+static ret_t window_manager_paint_measure(widget_t* widget, canvas_t* c) {
+  bitmap_t img;
+  matrix_t matrix;
+  uint32_t cost = 0;
+  matrix_t* m = &matrix;
+  uint32_t start_time = time_now_ms();
+
+  if (image_manager_get_bitmap(image_manager(), "progress_circle", &img) == RET_OK) {
+    matrix_init(m);
+    matrix_translate(m, 100, 100);
+    matrix_scale(m, 2, 2);
+    matrix_rotate(m, 0.1f);
+
+    canvas_draw_image_matrix(c, &img, m);
+  }
+
+  cost = time_now_ms() - start_time;
+  log_debug("cost=%d\n", cost);
+
+  return RET_OK;
+}
+
 static ret_t window_manager_paint_normal(widget_t* widget, canvas_t* c) {
   window_manager_t* wm = WINDOW_MANAGER(widget);
   rect_t* dr = &(wm->dirty_rect);
@@ -565,15 +589,17 @@ static ret_t window_manager_paint_normal(widget_t* widget, canvas_t* c) {
 
     if (r.w > 0 && r.h > 0) {
       ENSURE(canvas_begin_frame(c, &r, LCD_DRAW_NORMAL) == RET_OK);
+
+#ifdef PAINT_MEASURE
+      window_manager_paint_measure(widget, c);
+#else
       ENSURE(widget_paint(WIDGET(wm), c) == RET_OK);
       window_manager_paint_cursor(widget, c);
+#endif /*PAINT_MEASURE*/
+
       ENSURE(canvas_end_frame(c) == RET_OK);
       wm->last_paint_cost = time_now_ms() - start_time;
       wm->last_dirty_rect = wm->dirty_rect;
-      /*
-        log_debug("%s x=%d y=%d w=%d h=%d cost=%d\n", __FUNCTION__, (int)(r.x), (int)(r.y),
-                (int)(r.w), (int)(r.h), (int)wm->last_paint_cost);
-      */
     }
   }
 
