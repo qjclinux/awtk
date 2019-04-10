@@ -1,30 +1,16 @@
-/**
- * File:   draw_image_matrix.c
- * Author: AWTK Develop Team
- * Brief:  draw_image_matrix
- *
- * Copyright (c) 2018 - 2019  Guangzhou ZHIYUAN Electronics Co.,Ltd.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * License file for more details.
- *
- */
+#include <pixman.h>
 
-/**
- * History:
- * ================================================================
- * 2019-04-09 Li XianJing <xianjimli@hotmail.com> created
- *
- */
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_FREE TKMEM_FREE
+#define STBI_MALLOC TKMEM_ALLOC
+#define STBI_REALLOC(p, s) TKMEM_REALLOC(p, s)
 
-#include "draw_image_matrix.h"
+#include "stb/stb_image.h"
 
-#ifdef WITH_PIXMAN
-#include "pixman/pixman/pixman.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image_write.h"
 
-static ret_t to_pixman_transfrom(pixman_transform_t* t, matrix_t* m) {
+ret_t to_pixman_transfrom(pixman_transform_t* t, matrix_t* m) {
   return_value_if_fail(t != NULL && m != NULL, RET_BAD_PARAMS);
 
   t->matrix[0][0] = pixman_double_to_fixed(m->a0);
@@ -41,7 +27,7 @@ static ret_t to_pixman_transfrom(pixman_transform_t* t, matrix_t* m) {
   return RET_OK;
 }
 
-static pixman_format_code_t to_pixman_format(bitmap_format_t fmt) {
+pixman_format_code_t to_pixman_format(bitmap_format_t fmt) {
   switch (fmt) {
     case BITMAP_FMT_RGBA8888: {
       return PIXMAN_a8b8g8r8;
@@ -50,22 +36,22 @@ static pixman_format_code_t to_pixman_format(bitmap_format_t fmt) {
       return PIXMAN_r8g8b8a8;
     }
     case BITMAP_FMT_BGRA8888: {
-      return PIXMAN_a8r8g8b8;
-    }
-    case BITMAP_FMT_ARGB8888: {
       return PIXMAN_b8g8r8a8;
     }
-    case BITMAP_FMT_RGB565: {
-      return PIXMAN_b5g6r5;
+    case BITMAP_FMT_ARGB8888: {
+      return PIXMAN_a8b8g8r8;
     }
-    case BITMAP_FMT_BGR565: {
+    case BITMAP_FMT_RGB565: {
       return PIXMAN_r5g6b5;
     }
+    case BITMAP_FMT_BGR565: {
+      return PIXMAN_b5g6r5;
+    }
     case BITMAP_FMT_RGB888: {
-      return PIXMAN_b8g8r8;
+      return PIXMAN_r8g8b8;
     }
     case BITMAP_FMT_BGR888: {
-      return PIXMAN_r8g8b8;
+      return PIXMAN_b8g8r8;
     }
     default: {
       assert(!"not supported");
@@ -74,7 +60,7 @@ static pixman_format_code_t to_pixman_format(bitmap_format_t fmt) {
   }
 }
 
-static pixman_image_t* to_pixman_image(bitmap_t* img) {
+pixman_image_t* to_pixman_image(bitmap_t* img) {
   pixman_format_code_t fmt = to_pixman_format(img->format);
   uint32_t stride = bitmap_get_line_length(img);
 
@@ -83,6 +69,7 @@ static pixman_image_t* to_pixman_image(bitmap_t* img) {
 
 ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info) {
   pixman_region16_t clip;
+  pixman_box16_t clip_box;
   rect_t* r = &(info->clip);
   bitmap_t* img = info->img;
   matrix_t* m = &(info->matrix);
@@ -96,7 +83,7 @@ ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info) {
   to_pixman_transfrom(&transform, m);
   pixman_transform_invert(&transform, &transform);
   pixman_image_set_transform(s, &transform);
-  pixman_image_set_filter(s, PIXMAN_FILTER_BILINEAR, NULL, 0);
+
   pixman_image_composite(PIXMAN_OP_OVER, s, NULL, d, 0, 0, 0, 0, 0, 0, fb->w, fb->h);
 
   pixman_image_unref(s);
@@ -104,22 +91,26 @@ ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info) {
 
   return RET_OK;
 }
-#endif /*WITH_PIXMAN*/
 
-#ifdef WITH_VGCANVAS
-ret_t vgcanvas_draw_image_matrix(vgcanvas_t* vg, draw_image_info_t* info) {
-  bitmap_t* img = info->img;
-  matrix_t* m = &(info->matrix);
-  rect_t r = info->clip;
-  rect_t s = rect_init(0, 0, img->w, img->h);
-  rect_t d = rect_init(0, 0, img->w, img->h);
+ret_t load_image(const char* filename, bitmap_t* img) {
+  int w = 0;
+  int h = 0;
+  int c = 0;
+  void* data = stbi_load(filename, &w, &h, &c, 4);
 
-  vgcanvas_save(vg);
-  vgcanvas_clip_rect(vg, r.x, r.y, r.w, r.h);
-  vgcanvas_set_transform(vg, m->a0, m->a1, m->a2, m->a3, m->a4, m->a5);
-  vgcanvas_draw_image(vg, img, s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
-  vgcanvas_restore(vg);
+  memset(img, 0x00, sizeof(bitmap_t));
+  img->w = w;
+  img->h = h;
+  img->format = BITMAP_FMT_RGBA8888;
+  img->data = data;
+  img->should_free_data = TRUE;
+  img->line_length = w * 4;
 
   return RET_OK;
 }
-#endif /*WITH_VGCANVAS*/
+
+ret_t write_image(const char* filename, bitmap_t* img) {
+  stbi_write_png(filename, img->w, img->h, 4, img->data, 0);
+
+  return RET_OK;
+}
