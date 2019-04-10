@@ -215,10 +215,6 @@ typedef enum _app_type_t {
 #define WITH_VGCANVAS 1
 #endif /*defined(WITH_NANOVG_SOFT) || defined(WITH_NANOVG_GPU)*/
 
-#if defined(WITH_NANOVG_SOFT)
-#define WITH_PIXMAN 1
-#endif /*WITH_NANOVG_SOFT*/
-
 #ifndef TK_DEFAULT_FONT
 #ifdef WITH_MINI_FONT
 #define TK_DEFAULT_FONT "default_mini"

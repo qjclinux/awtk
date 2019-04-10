@@ -548,8 +548,6 @@ static ret_t window_manager_update_cursor(widget_t* widget, int32_t x, int32_t y
   return RET_OK;
 }
 
-#define PAINT_MEASURE
-
 static ret_t window_manager_paint_measure(widget_t* widget, canvas_t* c) {
   bitmap_t img;
   matrix_t matrix;
