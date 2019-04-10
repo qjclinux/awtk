@@ -1,8 +1,22 @@
 # 最新动态
+* 2019/04/10
+  * 更新demo，增加back\_to\_home的demo。
+  * 修改SDL的BUG(感谢大恒和陈谭提供补丁)
+  * 增加函数bitmap\_save\_png帮助调试显示相关的BUG。
+  * 修改widget\_destroy\_children的BUG(感谢朝泽和叶冬提供补丁)
+
+* 2019/04/09
+  * 修改window\_manager\_back\_to\_home。
+  * dialog支持非模态用法(请参考dialog的手册)
+  
+> AWTK在浏览器中运行时无法支持模态对话框，
+> 如果希望开发的AWTK应用程序在浏览器(包括各种小程序)中运行和演示，请不要使用模态对话框。
+
 * 2019/04/08
-  * 增加assets\_manager\_preload
   * 重构
   * 修改valgrind发现的内存泄露。
+  * 增加assets\_manager\_preload
+  * 合并optimization分支，fill\_image半透颜色性能提高3倍。
 
 * 2019/04/07
   * 为适配AWTK-WEB做了写小的修改。
