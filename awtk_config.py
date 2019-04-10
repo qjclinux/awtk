@@ -166,6 +166,7 @@ os.environ['TK_ROOT'] = TK_ROOT
 os.environ['CCFLAGS'] = CCFLAGS;
 os.environ['VGCANVAS'] = VGCANVAS 
 os.environ['GTEST_ROOT'] = GTEST_ROOT;
+os.environ['TARGET_ARCH'] = TARGET_ARCH
 os.environ['TK_3RD_ROOT'] = TK_3RD_ROOT;
 os.environ['INPUT_ENGINE'] = INPUT_ENGINE;
 os.environ['NANOVG_BACKEND'] = NANOVG_BACKEND;

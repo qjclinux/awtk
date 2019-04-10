@@ -52,21 +52,16 @@
 /* use MIPS DSPr2 assembly optimizations */
 /* #undef USE_MIPS_DSPR2 */
 
-#if defined(ARM_MATH_CM7) || defined(ARM_MATH_CM4)
-/* use ARM SIMD assembly optimizations */
-//# define USE_ARM_SIMD 1
-/* The size of `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
-#else /*x86*/
-/* use SSE2 compiler intrinsics */
-#define USE_SSE2 1
-/* use SSSE3 compiler intrinsics */
-#define USE_SSSE3 1
 /* use VMX compiler intrinsics */
 /* #undef USE_VMX */
-/* use x86 MMX compiler intrinsics */
-#define USE_X86_MMX 1
-/* The size of `long', as computed by sizeof. */
-#define SIZEOF_LONG 8
 
+#if defined(__arm__)
+# define USE_ARM_SIMD 1
+# define USE_ARM_NEON 1
+# define SIZEOF_LONG 4
+#else /*x86*/
+#define USE_SSE2 1
+#define USE_SSSE3 1
+#define USE_X86_MMX 1
+#define SIZEOF_LONG 8
 #endif/**/

@@ -58,6 +58,16 @@ X86_FILES=['pixman/pixman-sse2.c',
   'pixman/pixman-mmx.c'
 ]
 
-SOURCES = CORE_FILES + X86_FILES
+SOURCES = CORE_FILES;
+
+if os.environ['TARGET_ARCH'] == 'arm':
+  SOURCES = SOURCES + ARM_FILES
+elif os.environ['TARGET_ARCH'] == 'mips':
+  SOURCES = SOURCES + MIPS_FILES
+elif os.environ['TARGET_ARCH'] == 'ppc':
+  SOURCES = SOURCES + PPC_FILES
+else:
+  SOURCES = SOURCES + X86_FILES
+
 env.Library(os.path.join(LIB_DIR, 'pixman'), SOURCES, CCFLAGS = CCFLAGS);
 
