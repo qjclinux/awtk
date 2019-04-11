@@ -1,7 +1,7 @@
 ﻿/**
  * File:   soft_g2d.h
  * Author: AWTK Develop Team
- * Brief:  image blend
+ * Brief:  software implemented image operations
  *
  * Copyright (c) 2018 - 2019  Guangzhou ZHIYUAN Electronics Co.,Ltd.
  *
@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef TK_BLEND_H
-#define TK_BLEND_H
+#ifndef TK_SOFT_G2D_H
+#define TK_SOFT_G2D_H
 
 #include "tkc/rect.h"
 #include "base/bitmap.h"
@@ -35,4 +35,4 @@ ret_t soft_blend_image(bitmap_t* dst, bitmap_t* src, rect_t* dst_r, rect_t* src_
 
 END_C_DECLS
 
-#endif /*TK_BLEND_H*/
+#endif /*TK_SOFT_G2D_H*/

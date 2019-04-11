@@ -22,65 +22,7 @@
 #include "draw_image_matrix.h"
 
 #ifdef WITH_PIXMAN
-#include "pixman/pixman/pixman.h"
-
-static ret_t to_pixman_transfrom(pixman_transform_t* t, matrix_t* m) {
-  return_value_if_fail(t != NULL && m != NULL, RET_BAD_PARAMS);
-
-  t->matrix[0][0] = pixman_double_to_fixed(m->a0);
-  t->matrix[0][1] = pixman_double_to_fixed(m->a2);
-  t->matrix[0][2] = pixman_double_to_fixed(m->a4);
-  t->matrix[1][0] = pixman_double_to_fixed(m->a1);
-  t->matrix[1][1] = pixman_double_to_fixed(m->a3);
-  t->matrix[1][2] = pixman_double_to_fixed(m->a5);
-
-  t->matrix[2][0] = 0;
-  t->matrix[2][1] = 0;
-  t->matrix[2][2] = pixman_double_to_fixed(1);
-
-  return RET_OK;
-}
-
-static pixman_format_code_t to_pixman_format(bitmap_format_t fmt) {
-  switch (fmt) {
-    case BITMAP_FMT_RGBA8888: {
-      return PIXMAN_a8b8g8r8;
-    }
-    case BITMAP_FMT_ABGR8888: {
-      return PIXMAN_r8g8b8a8;
-    }
-    case BITMAP_FMT_BGRA8888: {
-      return PIXMAN_a8r8g8b8;
-    }
-    case BITMAP_FMT_ARGB8888: {
-      return PIXMAN_b8g8r8a8;
-    }
-    case BITMAP_FMT_RGB565: {
-      return PIXMAN_b5g6r5;
-    }
-    case BITMAP_FMT_BGR565: {
-      return PIXMAN_r5g6b5;
-    }
-    case BITMAP_FMT_RGB888: {
-      return PIXMAN_b8g8r8;
-    }
-    case BITMAP_FMT_BGR888: {
-      return PIXMAN_r8g8b8;
-    }
-    default: {
-      assert(!"not supported");
-      return 0;
-    }
-  }
-}
-
-static pixman_image_t* to_pixman_image(bitmap_t* img) {
-  pixman_format_code_t fmt = to_pixman_format(img->format);
-  uint32_t stride = bitmap_get_line_length(img);
-
-  return pixman_image_create_bits_no_clear(fmt, img->w, img->h, (uint32_t*)(img->data), stride);
-}
-
+#include "pixman_helper.h"
 ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info) {
   pixman_region16_t clip;
   rect_t* r = &(info->clip);

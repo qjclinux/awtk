@@ -1,7 +1,7 @@
 /**
  * File:   soft_g2d.c
  * Author: AWTK Develop Team
- * Brief:  soft g2d
+ * Brief:  software implemented image operations
  *
  * Copyright (c) 2018 - 2019  Guangzhou ZHIYUAN Electronics Co.,Ltd.
  *

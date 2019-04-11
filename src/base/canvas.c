@@ -1385,3 +1385,27 @@ ret_t canvas_set_text_color_str(canvas_t* c, const char* color) {
 canvas_t* canvas_cast(canvas_t* c) {
   return c;
 }
+
+#ifdef ENABLE_PERFORMANCE_PROFILE
+ret_t canvas_performance_test(canvas_t* c) {
+  bitmap_t img;
+  matrix_t matrix;
+  uint32_t cost = 0;
+  matrix_t* m = &matrix;
+  uint32_t start_time = time_now_ms();
+
+  if (image_manager_get_bitmap(image_manager(), "progress_circle", &img) == RET_OK) {
+    matrix_init(m);
+    matrix_translate(m, 100, 100);
+    matrix_scale(m, 2, 2);
+    matrix_rotate(m, 0.1f);
+
+    canvas_draw_image_matrix(c, &img, m);
+  }
+
+  cost = time_now_ms() - start_time;
+  log_debug("cost=%d\n", cost);
+
+  return RET_OK;
+}
+#endif /*ENABLE_PERFORMANCE_PROFILE*/

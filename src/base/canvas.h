@@ -519,7 +519,9 @@ ret_t canvas_set_font_manager(canvas_t* c, font_manager_t* font_manager);
 ret_t canvas_begin_frame(canvas_t* c, rect_t* dirty_rect, lcd_draw_mode_t draw_mode);
 ret_t canvas_end_frame(canvas_t* c);
 
+/*for test*/
 ret_t canvas_test_paint(canvas_t* c, bool_t pressed, xy_t x, xy_t y);
+ret_t canvas_performance_test(canvas_t* c);
 
 END_C_DECLS
 
