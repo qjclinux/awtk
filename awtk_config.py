@@ -67,13 +67,13 @@ else:
     COMMON_CCFLAGS=COMMON_CCFLAGS+' -DWITH_FB_BGR565=1';
 
 if NANOVG_BACKEND == 'AGG':
-  NANOVG_BACKEND_LIBS=['nanovg-agg', 'agg'];
-  NANOVG_BACKEND_PROJS=['3rd/agg/SConscript'];
-  COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_NANOVG_AGG '
+  NANOVG_BACKEND_LIBS=['nanovg-agg', 'agg', 'pixman'];
+  NANOVG_BACKEND_PROJS=['3rd/agg/SConscript', '3rd/pixman/SConscript'];
+  COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_NANOVG_AGG -DWITH_PIXMAN'
 elif NANOVG_BACKEND == 'AGGE':
-  NANOVG_BACKEND_LIBS=['nanovg-agge', 'agge'];
-  NANOVG_BACKEND_PROJS=['3rd/agge/SConscript'];
-  COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_NANOVG_AGGE '
+  NANOVG_BACKEND_LIBS=['nanovg-agge', 'agge', 'pixman'];
+  NANOVG_BACKEND_PROJS=['3rd/agge/SConscript', '3rd/pixman/SConscript'];
+  COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_NANOVG_AGGE -DWITH_PIXMAN '
 elif NANOVG_BACKEND == 'BGFX':
   NANOVG_BACKEND_LIBS=['nanovg-bgfx','bgfx'];
   NANOVG_BACKEND_PROJS=['3rd/bgfx/SConscript'];
