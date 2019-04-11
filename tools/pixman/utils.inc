@@ -1,5 +1,6 @@
 #include <pixman.h>
 
+#define STB_IMAGE_STATIC 1
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FREE TKMEM_FREE
 #define STBI_MALLOC TKMEM_ALLOC
@@ -7,7 +8,8 @@
 
 #include "stb/stb_image.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#define STB_IMAGE_WRITE_STATIC
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
 
 ret_t to_pixman_transfrom(pixman_transform_t* t, matrix_t* m) {
