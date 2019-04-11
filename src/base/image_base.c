@@ -232,7 +232,7 @@ ret_t image_transform_matrix(widget_t* widget, canvas_t* c, matrix_t* m) {
   float_t anchor_x = 0;
   float_t anchor_y = 0;
   image_base_t* image_base = IMAGE_BASE(widget);
-  return_value_if_fail(image_base != NULL && c != NULL && m != NULL, RET_BAD_PARAMS;
+  return_value_if_fail(image_base != NULL && c != NULL && m != NULL, RET_BAD_PARAMS);
 
   anchor_x = image_base->anchor_x * widget->w;
   anchor_y = image_base->anchor_y * widget->h;
