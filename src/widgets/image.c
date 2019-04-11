@@ -28,7 +28,6 @@
 static ret_t image_on_paint_self(widget_t* widget, canvas_t* c) {
   bitmap_t bitmap;
   image_t* image = IMAGE(widget);
-  vgcanvas_t* vg = lcd_get_vgcanvas(c->lcd);
   image_base_t* image_base = IMAGE_BASE(widget);
   return_value_if_fail(image != NULL, RET_BAD_PARAMS);
 
@@ -39,15 +38,10 @@ static ret_t image_on_paint_self(widget_t* widget, canvas_t* c) {
   return_value_if_fail(widget_load_image(widget, image_base->image, &bitmap) == RET_OK,
                        RET_BAD_PARAMS);
 
-  if (vg != NULL) {
-    if (image_need_transform(widget)) {
-      vgcanvas_save(vg);
-      image_transform(widget, c);
-      vgcanvas_draw_icon(vg, &bitmap, 0, 0, bitmap.w, bitmap.h, 0, 0, widget->w, widget->h);
-      vgcanvas_restore(vg);
-
-      return RET_OK;
-    }
+  if (image_need_transform(widget)) {
+    matrix_t m;
+    image_transform_matrix(widget, c, &m);
+    return canvas_draw_image_matrix(c, &bitmap, &m);
   }
 
   if (bitmap.data != NULL) {
