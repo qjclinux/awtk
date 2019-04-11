@@ -40,7 +40,7 @@ static ret_t image_on_paint_self(widget_t* widget, canvas_t* c) {
 
   if (image_need_transform(widget)) {
     matrix_t m;
-    image_transform_matrix(widget, c, &m);
+    image_transform_matrix(widget, c, &m, &bitmap);
     return canvas_draw_image_matrix(c, &bitmap, &m);
   }
 

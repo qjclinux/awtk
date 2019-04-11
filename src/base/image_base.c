@@ -228,11 +228,11 @@ bool_t image_need_transform(widget_t* widget) {
          !tk_fequal(image_base->rotation, 0);
 }
 
-ret_t image_transform_matrix(widget_t* widget, canvas_t* c, matrix_t* m) {
+ret_t image_transform_matrix(widget_t* widget, canvas_t* c, matrix_t* m, bitmap_t* img) {
   float_t anchor_x = 0;
   float_t anchor_y = 0;
   image_base_t* image_base = IMAGE_BASE(widget);
-  return_value_if_fail(image_base != NULL && c != NULL && m != NULL, RET_BAD_PARAMS);
+  return_value_if_fail(image_base != NULL && c != NULL && m != NULL && img != NULL, RET_BAD_PARAMS);
 
   anchor_x = image_base->anchor_x * widget->w;
   anchor_y = image_base->anchor_y * widget->h;
@@ -242,7 +242,12 @@ ret_t image_transform_matrix(widget_t* widget, canvas_t* c, matrix_t* m) {
   matrix_translate(m, anchor_x, anchor_y);
   matrix_rotate(m, image_base->rotation);
   matrix_scale(m, image_base->scale_x, image_base->scale_y);
-  matrix_translate(m, -anchor_x, -anchor_y);
+
+  if (img != NULL) {
+    matrix_translate(m, -img->w / 2, -img->h / 2);
+  } else {
+    matrix_translate(m, -anchor_x, -anchor_y);
+  }
 
   return RET_OK;
 }
@@ -252,7 +257,7 @@ ret_t image_transform(widget_t* widget, canvas_t* c) {
   vgcanvas_t* vg = lcd_get_vgcanvas(c->lcd);
   return_value_if_fail(widget != NULL && vg != NULL, RET_BAD_PARAMS);
 
-  image_transform_matrix(widget, c, &m);
+  image_transform_matrix(widget, c, &m, NULL);
   vgcanvas_set_transform(vg, m.a0, m.a1, m.a2, m.a3, m.a4, m.a5);
 
   return RET_OK;
