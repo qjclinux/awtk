@@ -4,24 +4,6 @@
 
 #define PRINTF printf
 
-void bitmap_dump(bitmap_t* b) {
-  rgba_t rgba;
-  uint32_t x = 0;
-  uint32_t y = 0;
-  uint32_t w = b->w;
-  uint32_t h = b->h;
-
-  PRINTF("-----------------------------------------------\n");
-  for (y = 0; y < h; y++) {
-    PRINTF("%02d:", y);
-    for (x = 0; x < w; x++) {
-      ASSERT_EQ(bitmap_get_pixel(b, x, y, &rgba), RET_OK);
-      PRINTF("%02x%02x%02x%02x ", rgba.r, rgba.g, rgba.b, rgba.a);
-    }
-    PRINTF("\n");
-  }
-}
-
 void bitmap_check(bitmap_t* b, rect_t* r, rgba_t e) {
   rgba_t rgba;
   uint32_t x = 0;

@@ -388,4 +388,23 @@ bool_t bitmap_save_png(bitmap_t* bitmap, const char* filename) {
   return TRUE;
 }
 
+bool_t bitmap_dump(bitmap_t* bitmap) {
+  color_t c;
+  uint32_t x = 0;
+  uint32_t y = 0;
+
+  log_debug("====================================================\n");
+  for (y = 0; y < bitmap->h; y++) {
+    log_debug("%02d: ", y);
+    for (x = 0; x < bitmap->w; x++) {
+      bitmap_get_pixel(bitmap, x, y, &(c.rgba));
+      log_debug("%08X ", c.color);
+    }
+    log_debug("\n");
+  }
+  log_debug("====================================================\n");
+
+  return TRUE;
+}
+
 #endif /*defined(WITH_SDL) || defined(LINUX)*/
