@@ -39,9 +39,7 @@ static ret_t image_on_paint_self(widget_t* widget, canvas_t* c) {
                        RET_BAD_PARAMS);
 
   if (image_need_transform(widget)) {
-    matrix_t m;
-    image_transform_matrix(widget, c, &m, &bitmap);
-    return canvas_draw_image_matrix(c, &bitmap, &m);
+    return image_transform_draw_icon(widget, c, &bitmap);
   }
 
   if (bitmap.data != NULL) {

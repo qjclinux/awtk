@@ -207,6 +207,7 @@ static ret_t time_clock_draw_image(canvas_t* c, bitmap_t* img, float_t dx, float
                                    float_t anchor_x, float_t anchor_y, float_t rotation) {
   matrix_t matrix;
   matrix_t* m = matrix_init(&matrix);
+  rect_t dst = rect_init(0, 0, img->w, img->h);
 
   matrix_identity(m);
   matrix_translate(m, c->ox + dx, c->oy + dy);
@@ -214,7 +215,7 @@ static ret_t time_clock_draw_image(canvas_t* c, bitmap_t* img, float_t dx, float
   matrix_rotate(m, rotation);
   matrix_translate(m, -anchor_x, -anchor_y);
 
-  return canvas_draw_image_matrix(c, img, m);
+  return canvas_draw_image_matrix(c, img, &dst, m);
 }
 
 static ret_t time_clock_on_paint_self(widget_t* widget, canvas_t* c) {

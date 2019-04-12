@@ -512,7 +512,7 @@ ret_t canvas_draw_image_scale_down(canvas_t* c, bitmap_t* img, rect_t* src, rect
 
 ret_t canvas_draw_line(canvas_t* c, xy_t x1, xy_t y1, xy_t x2, xy_t y2);
 ret_t canvas_draw_char(canvas_t* c, wchar_t chr, xy_t x, xy_t y);
-ret_t canvas_draw_image_matrix(canvas_t* c, bitmap_t* img, matrix_t* matrix);
+ret_t canvas_draw_image_matrix(canvas_t* c, bitmap_t* img, rect_t* dst, matrix_t* matrix);
 ret_t canvas_set_fps(canvas_t* c, bool_t show_fps, uint32_t fps);
 ret_t canvas_set_font_manager(canvas_t* c, font_manager_t* font_manager);
 

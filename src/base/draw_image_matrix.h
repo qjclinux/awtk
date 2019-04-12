@@ -31,6 +31,7 @@ BEGIN_C_DECLS
 
 typedef struct _draw_image_info_t {
   bitmap_t* img;
+  rect_t dst;
   rect_t clip;
   matrix_t matrix;
 } draw_image_info_t;

@@ -1100,12 +1100,13 @@ ret_t canvas_draw_image_scale_down(canvas_t* c, bitmap_t* img, rect_t* src, rect
   return canvas_draw_image(c, img, src, &d);
 }
 
-ret_t canvas_draw_image_matrix(canvas_t* c, bitmap_t* img, matrix_t* matrix) {
+ret_t canvas_draw_image_matrix(canvas_t* c, bitmap_t* img, rect_t* dst, matrix_t* matrix) {
   draw_image_info_t info;
-  return_value_if_fail(c != NULL && img != NULL && matrix != NULL && c->lcd != NULL,
+  return_value_if_fail(c != NULL && img != NULL && dst != NULL && matrix != NULL && c->lcd != NULL,
                        RET_BAD_PARAMS);
 
   info.img = img;
+  info.dst = *dst;
   info.matrix = *matrix;
   info.clip = rect_init(c->clip_left, c->clip_top, c->clip_right - c->clip_left,
                         c->clip_bottom - c->clip_top);

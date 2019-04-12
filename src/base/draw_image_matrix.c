@@ -25,21 +25,25 @@
 #include "pixman_helper.h"
 ret_t pixman_draw_image_matrix(bitmap_t* fb, draw_image_info_t* info) {
   pixman_region16_t clip;
-  rect_t* r = &(info->clip);
   bitmap_t* img = info->img;
+  uint16_t dx = info->dst.x;
+  uint16_t dy = info->dst.y;
+  uint16_t dw = fb->w;
+  uint16_t dh = fb->h;
   matrix_t* m = &(info->matrix);
   pixman_transform_t transform;
   pixman_image_t* s = to_pixman_image(img);
   pixman_image_t* d = to_pixman_image(fb);
 
-  pixman_region_init_rect(&clip, r->x, r->y, r->w, r->h);
+  pixman_region_init_rect(&clip, info->clip.x, info->clip.y, info->clip.w, info->clip.h);
   pixman_image_set_clip_region(d, &clip);
 
+  matrix_translate(m, dx, dy);
   to_pixman_transfrom(&transform, m);
   pixman_transform_invert(&transform, &transform);
   pixman_image_set_transform(s, &transform);
   pixman_image_set_filter(s, PIXMAN_FILTER_BILINEAR, NULL, 0);
-  pixman_image_composite(PIXMAN_OP_OVER, s, NULL, d, 0, 0, 0, 0, 0, 0, fb->w, fb->h);
+  pixman_image_composite(PIXMAN_OP_OVER, s, NULL, d, 0, 0, 0, 0, 0, 0, dw, dh);
 
   pixman_image_unref(s);
   pixman_image_unref(d);
@@ -54,7 +58,7 @@ ret_t vgcanvas_draw_image_matrix(vgcanvas_t* vg, draw_image_info_t* info) {
   matrix_t* m = &(info->matrix);
   rect_t r = info->clip;
   rect_t s = rect_init(0, 0, img->w, img->h);
-  rect_t d = rect_init(0, 0, img->w, img->h);
+  rect_t d = info->dst;
 
   vgcanvas_save(vg);
   vgcanvas_clip_rect(vg, r.x, r.y, r.w, r.h);
