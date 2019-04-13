@@ -1,7 +1,13 @@
 import os
 import awtk_config as awtk
 
+TOOLS_PREFIX='infer run -- '
 DefaultEnvironment(CCFLAGS = awtk.CCFLAGS, 
+  CC=TOOLS_PREFIX+'gcc',
+  CXX=TOOLS_PREFIX+'g++',
+  LD=TOOLS_PREFIX+'g++',
+  AR=TOOLS_PREFIX+'ar',
+  STRIP=TOOLS_PREFIX+'strip',
   LIBS = awtk.LIBS,
   LIBPATH = awtk.LIBPATH,
   CPPPATH = awtk.CPPPATH,
@@ -18,7 +24,6 @@ SConscriptFiles=awtk.NANOVG_BACKEND_PROJS + [
   '3rd/libunibreak/SConscript',
   'src/SConscript',
   'tools/common/SConscript', 
-  'tools/pixman/SConscript', 
   'tools/theme_gen/SConscript', 
   'tools/font_gen/SConscript', 
   'tools/image_gen/SConscript', 

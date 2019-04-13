@@ -157,6 +157,8 @@ typedef struct _pixel_rgba8888_t {
 #define pixel_rgba8888_format BITMAP_FMT_RGBA8888
 #define pixel_rgba8888_to_rgba(p) \
   { p.r, p.g, p.b, p.a }
+#define pixel_rgba8888_from_rgba(r, g, b, a) \
+  { r, g, b, a }
 #define pixel_rgba8888_from_rgb(r, g, b) \
   { r, g, b, 0xff }
 static inline void pixel_rgba8888_blend_rgba_dark(void* pixel, uint8_t a) {
@@ -190,6 +192,8 @@ typedef struct _pixel_abgr8888_t {
   { p.r, p.g, p.b, p.a }
 #define pixel_abgr8888_from_rgb(r, g, b) \
   { 0xff, b, g, r }
+#define pixel_abgr8888_from_rgba(r, g, b, a) \
+  { a, b, g, r }
 static inline void pixel_abgr8888_blend_rgba_dark(void* pixel, uint8_t a) {
   uint8_t* p = (uint8_t*)pixel;
 
@@ -219,6 +223,8 @@ typedef struct _pixel_bgra8888_t {
 #define pixel_bgra8888_format BITMAP_FMT_BGRA8888
 #define pixel_bgra8888_to_rgba(p) \
   { p.r, p.g, p.b, p.a }
+#define pixel_bgra8888_from_rgba(r, g, b, a) \
+  { b, g, r, a }
 #define pixel_bgra8888_from_rgb(r, g, b) \
   { b, g, r, 0xff }
 static inline void pixel_bgra8888_blend_rgba_dark(void* pixel, uint8_t a) {
@@ -250,6 +256,8 @@ typedef struct _pixel_argb8888_t {
 #define pixel_argb8888_format BITMAP_FMT_ARGB8888
 #define pixel_argb8888_to_rgba(p) \
   { p.r, p.g, p.b, p.a }
+#define pixel_argb8888_from_rgba(r, g, b, a) \
+  { a, r, g, b }
 #define pixel_argb8888_from_rgb(r, g, b) \
   { 0xff, r, g, b }
 static inline void pixel_argb8888_blend_rgba_dark(void* pixel, uint8_t a) {
