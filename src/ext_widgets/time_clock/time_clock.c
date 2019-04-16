@@ -209,8 +209,8 @@ static ret_t time_clock_load_image(widget_t* widget, const char* name, bitmap_t*
   return RET_FAIL;
 }
 
-static ret_t time_clock_draw_image(canvas_t* c, bitmap_t* img, float_t dx, float_t dy,
-                                   float_t anchor_x, float_t anchor_y, float_t rotation) {
+static ret_t time_clock_draw_image(widget_t* widget, canvas_t* c, bitmap_t* img, 
+    float_t dx, float_t dy, float_t anchor_x, float_t anchor_y, float_t rotation) {
   matrix_t matrix;
   matrix_t* m = matrix_init(&matrix);
   rect_t dst = rect_init(0, 0, img->w, img->h);
@@ -220,6 +220,14 @@ static ret_t time_clock_draw_image(canvas_t* c, bitmap_t* img, float_t dx, float
   matrix_translate(m, anchor_x, anchor_y);
   matrix_rotate(m, rotation);
   matrix_translate(m, -anchor_x, -anchor_y);
+
+#ifdef WITH_PIXMAN
+    if(!(img->flags & BITMAP_FLAG_PREMULTI_ALPHA)) {
+      if(image_manager_premulti_alpha(widget_get_image_manager(widget), img->name) == RET_OK) {
+        img->flags = img->flags | BITMAP_FLAG_PREMULTI_ALPHA;
+      }
+    }
+#endif/*WITH_PIXMAN*/
 
   return canvas_draw_image_matrix(c, img, &dst, m);
 }
@@ -245,7 +253,7 @@ static ret_t time_clock_on_paint_self(widget_t* widget, canvas_t* c) {
     anchor_x = bitmap.w / 2;
     anchor_y = bitmap.h - bitmap.w / 2;
 
-    time_clock_draw_image(c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
+    time_clock_draw_image(widget, c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
   }
 
   if (time_clock_load_image(widget, time_clock->minute_image, &bitmap) == RET_OK) {
@@ -257,7 +265,7 @@ static ret_t time_clock_on_paint_self(widget_t* widget, canvas_t* c) {
     anchor_x = bitmap.w / 2;
     anchor_y = bitmap.h - bitmap.w / 2;
 
-    time_clock_draw_image(c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
+    time_clock_draw_image(widget, c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
   }
 
   if (time_clock_load_image(widget, time_clock->second_image, &bitmap) == RET_OK) {
@@ -268,7 +276,7 @@ static ret_t time_clock_on_paint_self(widget_t* widget, canvas_t* c) {
     anchor_x = bitmap.w / 2;
     anchor_y = dst.h / 2 - 2;
 
-    time_clock_draw_image(c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
+    time_clock_draw_image(widget, c, &bitmap, dx, dy, anchor_x, anchor_y, rotation);
   }
 
   if (time_clock_load_image(widget, time_clock->image, &bitmap) == RET_OK) {

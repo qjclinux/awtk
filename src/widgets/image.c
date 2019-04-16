@@ -39,6 +39,13 @@ static ret_t image_on_paint_self(widget_t* widget, canvas_t* c) {
                        RET_BAD_PARAMS);
 
   if (image_need_transform(widget)) {
+#ifdef WITH_PIXMAN
+    if(!(bitmap.flags & BITMAP_FLAG_PREMULTI_ALPHA)) {
+      if(image_manager_premulti_alpha(widget_get_image_manager(widget), bitmap.name) == RET_OK) {
+        bitmap.flags = bitmap.flags | BITMAP_FLAG_PREMULTI_ALPHA;
+      }
+    }
+#endif/*WITH_PIXMAN*/
     return image_transform_draw_icon(widget, c, &bitmap);
   }
 

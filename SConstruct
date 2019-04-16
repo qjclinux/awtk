@@ -1,13 +1,7 @@
 import os
 import awtk_config as awtk
 
-TOOLS_PREFIX='infer run -- '
 DefaultEnvironment(CCFLAGS = awtk.CCFLAGS, 
-  CC=TOOLS_PREFIX+'gcc',
-  CXX=TOOLS_PREFIX+'g++',
-  LD=TOOLS_PREFIX+'g++',
-  AR=TOOLS_PREFIX+'ar',
-  STRIP=TOOLS_PREFIX+'strip',
   LIBS = awtk.LIBS,
   LIBPATH = awtk.LIBPATH,
   CPPPATH = awtk.CPPPATH,

@@ -240,6 +240,25 @@ ret_t image_manager_get_bitmap(image_manager_t* imm, const char* name, bitmap_t*
   }
 }
 
+ret_t image_manager_premulti_alpha(image_manager_t* imm, const char* name) {
+  bitmap_cache_t info;
+  ret_t ret = RET_FAIL;
+  bitmap_cache_t* iter = NULL;
+  return_value_if_fail(imm != NULL && name != NULL, RET_BAD_PARAMS);
+
+  tk_strncpy(info.name, name, TK_NAME_LEN);
+  imm->images.compare = (tk_compare_t)bitmap_cache_cmp_name;
+  iter = darray_find(&(imm->images), &info);
+
+  if (iter != NULL) {
+    ret = bitmap_premulti_alpha(&(iter->image));
+  } else {
+    ret = RET_NOT_FOUND;
+  }
+
+  return ret;
+}
+
 ret_t image_manager_set_assets_manager(image_manager_t* imm, assets_manager_t* am) {
   return_value_if_fail(imm != NULL, RET_BAD_PARAMS);
 

@@ -1,0 +1,4 @@
+<window anim_hint="htranslate">
+    <image draw_type="icon" image="ball" w="100%" h="100%" 
+      animation="rotation(from=0, to=6.28, repeat_times=0, duration=2000, easing=linear)"/>
+</window>
