@@ -25,7 +25,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <stdio.h>
+#include <pixman-log.h>
 #include <stdlib.h>
 
 #include "pixman-private.h"
@@ -319,7 +319,7 @@ _pixman_log_error (const char *function, const char *message)
 
     if (n_messages < 10)
     {
-	fprintf (stderr,
+	pixman_logf (stderr,
 		 "*** BUG ***\n"
 		 "In %s: %s\n"
 		 "Set a breakpoint on '_pixman_log_error' to debug\n\n",

@@ -66,7 +66,6 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
-#include <stdio.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -350,8 +349,8 @@ PREFIX (_print) (region_type_t *rgn)
     size = PIXREGION_SIZE (rgn);
     rects = PIXREGION_RECTS (rgn);
 
-    fprintf (stderr, "num: %d size: %d\n", num, size);
-    fprintf (stderr, "extents: %d %d %d %d\n",
+    pixman_logf (stderr, "num: %d size: %d\n", num, size);
+    pixman_logf (stderr, "extents: %d %d %d %d\n",
              rgn->extents.x1,
 	     rgn->extents.y1,
 	     rgn->extents.x2,
@@ -359,11 +358,11 @@ PREFIX (_print) (region_type_t *rgn)
     
     for (i = 0; i < num; i++)
     {
-	fprintf (stderr, "%d %d %d %d \n",
+	pixman_logf (stderr, "%d %d %d %d \n",
 	         rects[i].x1, rects[i].y1, rects[i].x2, rects[i].y2);
     }
     
-    fprintf (stderr, "\n");
+    pixman_logf (stderr, "\n");
 
     return(num);
 }

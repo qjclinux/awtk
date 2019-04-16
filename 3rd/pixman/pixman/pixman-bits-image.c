@@ -29,7 +29,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <stdio.h>
+#include <pixman-log.h>
 #include <stdlib.h>
 #include <string.h>
 #include "pixman-private.h"

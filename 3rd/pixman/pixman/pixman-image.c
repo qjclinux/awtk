@@ -25,7 +25,7 @@
 #endif
 
 #include <stdlib.h>
-#include <stdio.h>
+#include <pixman-log.h>
 #include <string.h>
 #include <assert.h>
 

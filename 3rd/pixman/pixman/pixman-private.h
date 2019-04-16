@@ -25,11 +25,11 @@
 #include "pixman.h"
 #include <time.h>
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 #include <stddef.h>
 #include <float.h>
 
+#include "pixman-log.h"
 #include "pixman-compiler.h"
 
 /*

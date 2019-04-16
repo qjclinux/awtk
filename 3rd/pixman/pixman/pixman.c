@@ -824,8 +824,8 @@ color_to_pixel (const pixman_color_t *color,
 	c = convert_8888_to_0565 (c);
 
 #if 0
-    printf ("color: %x %x %x %x\n", color->alpha, color->red, color->green, color->blue);
-    printf ("pixel: %x\n", c);
+    pixman_log ("color: %x %x %x %x\n", color->alpha, color->red, color->green, color->blue);
+    pixman_log ("pixel: %x\n", c);
 #endif
 
     *pixel = c;

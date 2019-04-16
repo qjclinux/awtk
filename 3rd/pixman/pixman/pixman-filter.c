@@ -25,7 +25,7 @@
  */
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <pixman-log.h>
 #include <math.h>
 #include <assert.h>
 #ifdef HAVE_CONFIG_H
@@ -340,10 +340,10 @@ gnuplot_filter (int width, int n_phases, const pixman_fixed_t* p)
 
     step = 1.0 / n_phases;
 
-    printf ("set style line 1 lc rgb '#0060ad' lt 1 lw 0.5 pt 7 pi 1 ps 0.5\n");
-    printf ("plot [x=%g:%g] '-' with linespoints ls 1\n", -width*0.5, width*0.5);
+    pixman_log ("set style line 1 lc rgb '#0060ad' lt 1 lw 0.5 pt 7 pi 1 ps 0.5\n");
+    pixman_log ("plot [x=%g:%g] '-' with linespoints ls 1\n", -width*0.5, width*0.5);
     /* Print a point at the origin so that y==0 line is included: */
-    printf ("0 0\n\n");
+    pixman_log ("0 0\n\n");
 
     /* The position of the first sample of the phase corresponding to
      * frac is given by:
@@ -416,13 +416,13 @@ gnuplot_filter (int width, int n_phases, const pixman_fixed_t* p)
 	    frac = step / 2.0 + phase * step;
 	    pos = ceil (frac - width / 2.0 - 0.5) + 0.5 - frac + j;
 
-	    printf ("%g %g\n",
+	    pixman_log ("%g %g\n",
 		    pos,
 		    pixman_fixed_to_double (*(p + phase * width + j)));
 	}
     }
 
-    printf ("e\n");
+    pixman_log ("e\n");
     fflush (stdout);
 }
 

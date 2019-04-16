@@ -226,7 +226,9 @@
     tls_ ## name ## _get ()
 
 #else
-
-#    error "Unknown thread local support for this system. Pixman will not work with multiple threads. Define PIXMAN_NO_TLS to acknowledge and accept this limitation and compile pixman without thread-safety support."
+#   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
+    static type name
+#   define PIXMAN_GET_THREAD_LOCAL(name)				\
+    (&name)
 
 #endif

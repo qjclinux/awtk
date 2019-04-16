@@ -32,7 +32,7 @@
 #include <string.h>
 #include <math.h>
 #include <limits.h>
-#include <stdio.h>
+#include <pixman-log.h>
 #include <stdlib.h>
 #include <string.h>
 #include "pixman-private.h"

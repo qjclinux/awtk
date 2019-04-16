@@ -74,7 +74,7 @@ pixman_have_vmx (void)
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <pixman-log.h>
 #include <linux/auxvec.h>
 #include <asm/cputable.h>
 

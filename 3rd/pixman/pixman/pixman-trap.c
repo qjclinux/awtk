@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <stdio.h>
+#include <pixman-log.h>
 #include <stdlib.h>
 #include "pixman-private.h"
 
@@ -294,12 +294,12 @@ dump_image (pixman_image_t *image,
     int i, j;
 
     if (!image->type == BITS)
-	printf ("%s is not a regular image\n", title);
+	pixman_log ("%s is not a regular image\n", title);
 
     if (!image->bits.format == PIXMAN_a8)
-	printf ("%s is not an alpha mask\n", title);
+	pixman_log ("%s is not an alpha mask\n", title);
 
-    printf ("\n\n\n%s: \n", title);
+    pixman_log ("\n\n\n%s: \n", title);
 
     for (i = 0; i < image->bits.height; ++i)
     {
@@ -307,9 +307,9 @@ dump_image (pixman_image_t *image,
 	    (uint8_t *)&(image->bits.bits[i * image->bits.rowstride]);
 
 	for (j = 0; j < image->bits.width; ++j)
-	    printf ("%c", line[j] ? '#' : ' ');
+	    pixman_log ("%c", line[j] ? '#' : ' ');
 
-	printf ("\n");
+	pixman_log ("\n");
     }
 }
 #endif
