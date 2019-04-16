@@ -159,9 +159,10 @@ ret_t window_manager_snap_curr_window(widget_t* widget, widget_t* curr_win, bitm
   vg = lcd_get_vgcanvas(c->lcd);
   ENSURE(vgcanvas_create_fbo(vg, fbo) == RET_OK);
   ENSURE(vgcanvas_bind_fbo(vg, fbo) == RET_OK);
-  vgcanvas_scale(vg, 1, 1);
+  ENSURE(canvas_begin_frame(c, NULL, LCD_DRAW_OFFLINE) == RET_OK);
   ENSURE(widget_on_paint_background(widget, c) == RET_OK);
   ENSURE(widget_paint(curr_win, c) == RET_OK);
+  ENSURE(canvas_end_frame(c) == RET_OK);
   ENSURE(vgcanvas_unbind_fbo(vg, fbo) == RET_OK);
   fbo_to_img(fbo, img);
 #else
@@ -199,14 +200,14 @@ ret_t window_manager_snap_prev_window(widget_t* widget, widget_t* prev_win, bitm
   vg = lcd_get_vgcanvas(c->lcd);
   ENSURE(vgcanvas_create_fbo(vg, fbo) == RET_OK);
   ENSURE(vgcanvas_bind_fbo(vg, fbo) == RET_OK);
-  vgcanvas_scale(vg, 1, 1);
-
+  ENSURE(canvas_begin_frame(c, NULL, LCD_DRAW_OFFLINE) == RET_OK);
   ENSURE(widget_on_paint_background(widget, c) == RET_OK);
   ENSURE(widget_paint(prev_win, c) == RET_OK);
 
   if (dialog_highlighter != NULL) {
     dialog_highlighter_prepare(dialog_highlighter, c);
   }
+  ENSURE(canvas_end_frame(c) == RET_OK);
   ENSURE(vgcanvas_unbind_fbo(vg, fbo) == RET_OK);
   fbo_to_img(fbo, img);
 #else
@@ -643,6 +644,7 @@ static ret_t window_manager_update_fps(widget_t* widget) {
 }
 
 ret_t window_manager_paint(widget_t* widget, canvas_t* c) {
+  paint_event_t e;
   ret_t ret = RET_OK;
   window_manager_t* wm = WINDOW_MANAGER(widget);
   return_value_if_fail(wm != NULL && c != NULL, RET_BAD_PARAMS);
@@ -651,11 +653,14 @@ ret_t window_manager_paint(widget_t* widget, canvas_t* c) {
   canvas_set_global_alpha(c, 0xff);
   window_manager_update_fps(widget);
 
+  widget_dispatch(widget, paint_event_init(&e, EVT_BEFORE_PAINT, widget, c));
   if (wm->animator != NULL) {
     ret = window_manager_paint_animation(widget, c);
   } else {
     ret = window_manager_paint_normal(widget, c);
   }
+  widget_dispatch(widget, paint_event_init(&e, EVT_AFTER_PAINT, widget, c));
+  widget_dispatch(widget, paint_event_init(&e, EVT_PAINT_DONE, widget, c));
 
   return ret;
 }
@@ -1039,6 +1044,8 @@ ret_t window_manager_back_to_home(widget_t* widget) {
   return_value_if_fail(widget != NULL, RET_BAD_PARAMS);
 
   top = window_manager_get_top_window(widget);
+  return_value_if_fail(top != NULL, RET_BAD_PARAMS);
+
   if (!is_dialog(top) || !dialog_is_modal(top)) {
     idle_add(window_manager_back_to_home_async, widget);
 

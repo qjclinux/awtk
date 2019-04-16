@@ -1,4 +1,20 @@
 # 最新动态
+* 2019/04/16
+  * window manager支持paint事件。
+
+* 2019/04/15
+  * 去掉widget\_is\_window\_opened中的警告。
+
+* 2019/04/14
+  * 为AWTK-WEB移植做了些修改。
+
+* 2019/04/13
+  * 增加cppcheck和infer静态检查。
+  * 修改cppcheck和infer发现的警告。
+
+* 2019/04/12
+  * 增加函数ui\_loader\_load\_widget(ui\_loader.h)。
+
 * 2019/04/10
   * 更新demo，增加back\_to\_home的demo。
   * 修改SDL的BUG(感谢大恒和陈谭提供补丁)

@@ -404,12 +404,15 @@ def gen_res_web_c():
     result += '  tk_init_assets();\n'
     result += '  return RET_OK;\n'
     result += '}\n'
+
+    global ASSET_C
+    ASSET_C = ASSET_C.replace('.c', '_web.c');
     writeResult(result)
 
 def gen_res_json_one(res_type, files):
     result= "\n  " + res_type + ': [\n'
     for f in files:
-        uri = f.replace(os.getcwd(), "")
+        uri = f.replace(os.getcwd(), "")[1:]
         filename, extname = os.path.splitext(uri)
         basename = os.path.basename(filename)
         result = result + '    {name:"' + basename + '\", uri:"' + uri;
@@ -436,7 +439,9 @@ def gen_res_json():
     result = result + gen_res_json_one("font", glob.glob(joinPath(INPUT_DIR, 'fonts/*.ttf')));
     result = result + '\n};';
 
-    writeResultJSON(result);
+    global ASSET_C
+    ASSET_C = ASSET_C.replace('.c', '_web.js');
+    writeResult(result);
 
 def gen_res():
     prepare()

@@ -126,10 +126,13 @@ ret_t widget_animate_value_to(widget_t* widget, int32_t value, uint32_t duration
 }
 
 bool_t widget_is_window_opened(widget_t* widget) {
-  int32_t stage =
-      widget_get_prop_int(widget_get_window(widget), WIDGET_PROP_STAGE, WINDOW_STAGE_NONE);
-
-  return stage == WINDOW_STAGE_OPENED;
+  widget_t* win = widget_get_window(widget);
+  
+  if(win != NULL) {
+    return WINDOW_STAGE_OPENED == widget_get_prop_int(win, WIDGET_PROP_STAGE, WINDOW_STAGE_NONE);
+  } else {
+    return FALSE;
+  }
 }
 
 ret_t widget_use_style(widget_t* widget, const char* value) {
@@ -709,10 +712,14 @@ ret_t widget_off_by_func(widget_t* widget, uint32_t type, event_func_t on_event,
 ret_t widget_draw_icon_text(widget_t* widget, canvas_t* c, const char* icon, wstr_t* text) {
   rect_t r;
   bitmap_t img;
+  int32_t margin = 0;
+  int32_t icon_at = 0;
+  uint16_t font_size = 0;
   style_t* style = widget->astyle;
-  int32_t margin = style_get_int(style, STYLE_ID_MARGIN, 2);
-  int32_t icon_at = style_get_int(style, STYLE_ID_ICON_AT, ICON_AT_AUTO);
-  uint16_t font_size = style_get_int(style, STYLE_ID_FONT_SIZE, TK_DEFAULT_FONT_SIZE);
+  return_value_if_fail(widget->astyle != NULL, RET_BAD_PARAMS);
+
+  margin = style_get_int(style, STYLE_ID_MARGIN, 2);
+  icon_at = style_get_int(style, STYLE_ID_ICON_AT, ICON_AT_AUTO);
 
   wh_t w = widget->w - 2 * margin;
   wh_t h = widget->h - 2 * margin;
@@ -1518,7 +1525,7 @@ uint32_t widget_add_timer(widget_t* widget, timer_func_t on_timer, uint32_t dura
   return_value_if_fail(widget != NULL && on_timer != NULL, TK_INVALID_ID);
 
   id = timer_add(on_timer, widget, duration_ms);
-  widget_on(widget, EVT_DESTROY, widget_remove_timer_on_destroy, ((char*)NULL) + id);
+  widget_on(widget, EVT_DESTROY, widget_remove_timer_on_destroy, tk_pointer_from_int(id));
 
   return id;
 }
