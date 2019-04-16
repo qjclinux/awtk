@@ -20,6 +20,7 @@
  */
 
 #include "base/lcd.h"
+#include "tkc/time_now.h"
 #include "base/system_info.h"
 
 ret_t lcd_begin_frame(lcd_t* lcd, rect_t* dirty_rect, lcd_draw_mode_t draw_mode) {
@@ -166,13 +167,22 @@ ret_t lcd_draw_image(lcd_t* lcd, bitmap_t* img, rect_t* src, rect_t* dst) {
 }
 
 ret_t lcd_draw_image_matrix(lcd_t* lcd, draw_image_info_t* info) {
+  ret_t ret = RET_NOT_IMPL;
   return_value_if_fail(lcd != NULL && info != NULL, RET_BAD_PARAMS);
 
   if (lcd->draw_image_matrix != NULL) {
-    return lcd->draw_image_matrix(lcd, info);
+#ifdef ENABLE_PERFORMANCE_PROFILE
+    uint32_t cost = 0;
+    uint32_t start = time_now_ms();
+    ret = lcd->draw_image_matrix(lcd, info);
+    cost = time_now_ms() - start;
+    log_debug("lcd_draw_image_matrix cost=%u\n", cost);
+#else
+    ret = lcd->draw_image_matrix(lcd, info);
+#endif /*ENABLE_PERFORMANCE_PROFILE*/
   }
 
-  return RET_NOT_IMPL;
+  return ret;
 }
 
 ret_t lcd_draw_glyph(lcd_t* lcd, glyph_t* glyph, rect_t* src, xy_t x, xy_t y) {
