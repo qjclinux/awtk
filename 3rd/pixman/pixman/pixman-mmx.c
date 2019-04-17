@@ -30,7 +30,7 @@
  */
 
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 
 #if defined USE_X86_MMX || defined USE_ARM_IWMMXT || defined USE_LOONGSON_MMI

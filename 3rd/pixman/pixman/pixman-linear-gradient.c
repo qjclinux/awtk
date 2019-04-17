@@ -26,7 +26,7 @@
  */
 
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 #include <stdlib.h>
 #include "pixman-private.h"

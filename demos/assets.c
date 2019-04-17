@@ -68,6 +68,7 @@
 #include "assets/inc/ui/language.data"
 #include "assets/inc/ui/kb_float.data"
 #include "assets/inc/ui/htranslate.data"
+#include "assets/inc/ui/image_rotate.data"
 #include "assets/inc/ui/list_view_vh.data"
 #include "assets/inc/ui/rich_text.data"
 #include "assets/inc/ui/scroll_view.data"
@@ -183,6 +184,7 @@
 #include "assets/inc/images/msg.res"
 #include "assets/inc/images/play_o.res"
 #include "assets/inc/images/play_n.res"
+#include "assets/inc/images/ball.res"
 #include "assets/inc/images/msg_active.res"
 #include "assets/inc/images/radio_checked.res"
 #include "assets/inc/images/active_dot.res"
@@ -251,6 +253,7 @@
 #include "assets/inc/images/clock_hour.res"
 #else
 #include "assets/inc/images/arrow_right_o.data"
+#include "assets/inc/images/ball.data"
 #include "assets/inc/images/num_4.data"
 #include "assets/inc/images/close_o.data"
 #include "assets/inc/images/battery_1.data"
@@ -371,24 +374,24 @@
 #include "assets/inc/images/arrow_left_n.data"
 #include "assets/inc/images/edit_clear_p.data"
 #include "assets/inc/images/battery_2.data"
-#endif /*WITH_STB_IMAGE*/
+#endif/*WITH_STB_IMAGE*/
 #ifdef WITH_VGCANVAS
 #include "assets/inc/images/pointer_4.bsvg"
 #include "assets/inc/images/china.bsvg"
 #include "assets/inc/images/pointer_1.bsvg"
 #include "assets/inc/images/pointer.bsvg"
 #include "assets/inc/images/girl.bsvg"
-#endif /*WITH_VGCANVAS*/
+#endif/*WITH_VGCANVAS*/
 #if defined(WITH_STB_FONT) || defined(WITH_FT_FONT)
 #if defined(WITH_MINI_FONT)
 #include "assets/inc/fonts/default_mini.res"
-#else /*WITH_MINI_FONT*/
+#else/*WITH_MINI_FONT*/
 #include "assets/inc/fonts/default.res"
-#endif /*WITH_MINI_FONT*/
-#else  /*WITH_STB_FONT or WITH_FT_FONT*/
+#endif/*WITH_MINI_FONT*/
+#else/*WITH_STB_FONT or WITH_FT_FONT*/
 #include "assets/inc/fonts/default.data"
-#endif /*WITH_STB_FONT or WITH_FT_FONT*/
-#endif /*WITH_FS_RES*/
+#endif/*WITH_STB_FONT or WITH_FT_FONT*/
+#endif/*WITH_FS_RES*/
 
 ret_t assets_init(void) {
   assets_manager_t* rm = assets_manager();
@@ -396,9 +399,9 @@ ret_t assets_init(void) {
 #ifdef WITH_FS_RES
 #if defined(WITH_MINI_FONT)
   assets_manager_preload(rm, ASSET_TYPE_FONT, "default_mini");
-#else  /*WITH_MINI_FONT*/
+#else/*WITH_MINI_FONT*/
   assets_manager_preload(rm, ASSET_TYPE_FONT, "default");
-#endif /*WITH_MINI_FONT*/
+#endif/*WITH_MINI_FONT*/
   assets_manager_preload(rm, ASSET_TYPE_STYLE, "default");
 #else
   assets_manager_add(rm, ui_kb_ascii);
@@ -445,6 +448,7 @@ ret_t assets_init(void) {
   assets_manager_add(rm, ui_language);
   assets_manager_add(rm, ui_kb_float);
   assets_manager_add(rm, ui_htranslate);
+  assets_manager_add(rm, ui_image_rotate);
   assets_manager_add(rm, ui_list_view_vh);
   assets_manager_add(rm, ui_rich_text);
   assets_manager_add(rm, ui_scroll_view);
@@ -502,6 +506,7 @@ ret_t assets_init(void) {
   assets_manager_add(rm, strings_zh_CN);
   assets_manager_add(rm, strings_en_US);
   assets_manager_add(rm, image_arrow_right_o);
+  assets_manager_add(rm, image_ball);
   assets_manager_add(rm, image_num_4);
   assets_manager_add(rm, image_close_o);
   assets_manager_add(rm, image_battery_1);
@@ -646,9 +651,9 @@ ret_t assets_init(void) {
   assets_manager_add(rm, style_dialog_warn);
 #if defined(WITH_MINI_FONT) && (defined(WITH_STB_FONT) || defined(WITH_FT_FONT))
   assets_manager_add(rm, font_default_mini);
-#else  /*WITH_MINI_FONT*/
+#else/*WITH_MINI_FONT*/
   assets_manager_add(rm, font_default);
-#endif /*WITH_MINI_FONT*/
+#endif/*WITH_MINI_FONT*/
   assets_manager_add(rm, data_com_zlg_app_json);
   assets_manager_add(rm, data_test_dat);
   assets_manager_add(rm, data_test_json);
@@ -659,7 +664,7 @@ ret_t assets_init(void) {
   assets_manager_add(rm, image_pointer_1);
   assets_manager_add(rm, image_pointer);
   assets_manager_add(rm, image_girl);
-#endif /*WITH_VGCANVAS*/
+#endif/*WITH_VGCANVAS*/
 #endif
 
   tk_init_assets();

@@ -26,13 +26,13 @@
  * SOFTWARE.
  */
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <limits.h>
-#include <pixman-log.h>
+#include "pixman-log.h"
 #include <stdlib.h>
 #include <string.h>
 #include "pixman-private.h"

@@ -289,7 +289,7 @@ ret_t bsvg_draw_shape_end(draw_ctx_t* ctx, const svg_shape_t* shape) {
     vgcanvas_set_fill_color(canvas, header->fill);
   }
 
-  if (!shape->no_fill) {
+  if (!shape->no_fill && canvas->fill_color.rgba.a) {
     vgcanvas_fill(canvas);
   }
 
@@ -299,7 +299,7 @@ ret_t bsvg_draw_shape_end(draw_ctx_t* ctx, const svg_shape_t* shape) {
     vgcanvas_set_stroke_color(canvas, header->stroke);
   }
 
-  if (!shape->no_stroke) {
+  if (!shape->no_stroke && canvas->stroke_color.rgba.a) {
     vgcanvas_stroke(canvas);
   }
 

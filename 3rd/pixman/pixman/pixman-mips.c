@@ -20,7 +20,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 
 #include "pixman-private.h"

@@ -27,7 +27,7 @@
  * Based on work by Owen Taylor and Søren Sandmann
  */
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 
 /* PSHUFD is slow on a lot of old processors, and new processors have SSSE3 */

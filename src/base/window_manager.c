@@ -549,7 +549,13 @@ static ret_t window_manager_update_cursor(widget_t* widget, int32_t x, int32_t y
   return RET_OK;
 }
 
+static uint32_t log_cost(uint32_t cost) {
+	return cost + 1;
+}
+
 static ret_t window_manager_paint_normal(widget_t* widget, canvas_t* c) {
+	uint32_t end = 0;
+	uint32_t cost = 0;
   window_manager_t* wm = WINDOW_MANAGER(widget);
   rect_t* dr = &(wm->dirty_rect);
 
@@ -573,6 +579,11 @@ static ret_t window_manager_paint_normal(widget_t* widget, canvas_t* c) {
       ENSURE(canvas_end_frame(c) == RET_OK);
       wm->last_paint_cost = time_now_ms() - start_time;
       wm->last_dirty_rect = wm->dirty_rect;
+			end = time_now_ms();
+			cost = end - start_time;
+			r.x = cost;
+			r.y = cost;
+			r.w = log_cost(cost);
     }
   }
 

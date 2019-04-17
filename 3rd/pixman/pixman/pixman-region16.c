@@ -23,7 +23,7 @@
  * Author: Soren Sandmann <sandmann@redhat.com>
  */
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 
 #undef PIXMAN_DISABLE_DEPRECATED

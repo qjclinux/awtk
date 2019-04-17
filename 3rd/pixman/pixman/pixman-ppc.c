@@ -20,7 +20,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 
 #include "pixman-private.h"
@@ -74,7 +74,7 @@ pixman_have_vmx (void)
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <pixman-log.h>
+#include "pixman-log.h"
 #include <linux/auxvec.h>
 #include <asm/cputable.h>
 

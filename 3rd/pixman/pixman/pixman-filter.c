@@ -25,11 +25,11 @@
  */
 #include <string.h>
 #include <stdlib.h>
-#include <pixman-log.h>
+#include "pixman-log.h"
 #include <math.h>
 #include <assert.h>
 #if 1
-#include <pixman-config.h>
+#include "pixman-config.h"
 #endif
 #include "pixman-private.h"
 
