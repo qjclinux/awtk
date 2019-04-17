@@ -25,8 +25,8 @@
  * SOFTWARE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+#if 1
+#include <pixman-config.h>
 #endif
 #include <stdlib.h>
 #include "pixman-private.h"

@@ -28,8 +28,8 @@
 #include <pixman-log.h>
 #include <math.h>
 #include <assert.h>
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+#if 1
+#include <pixman-config.h>
 #endif
 #include "pixman-private.h"
 

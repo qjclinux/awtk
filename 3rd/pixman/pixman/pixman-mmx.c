@@ -29,8 +29,8 @@
  * Based on work by Owen Taylor
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+#if 1
+#include <pixman-config.h>
 #endif
 
 #if defined USE_X86_MMX || defined USE_ARM_IWMMXT || defined USE_LOONGSON_MMI

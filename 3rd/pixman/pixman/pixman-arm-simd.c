@@ -23,8 +23,8 @@
  * Author:  Jeff Muizelaar (jeff@infidigm.net)
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+#if 1
+#include <pixman-config.h>
 #endif
 
 #include "pixman-private.h"
