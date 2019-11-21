@@ -27,6 +27,7 @@
 #include "blend_image_bgr565_bgr565.h"
 #include "blend_image_bgr565_bgra8888.h"
 #include "blend_image_bgr565_rgba8888.h"
+#include "blend_image_bgr565_gray.h"
 #include "blend_image_bgr888_bgr565.h"
 #include "blend_image_bgr888_bgra8888.h"
 #include "blend_image_bgr888_rgba8888.h"
@@ -36,6 +37,7 @@
 #include "blend_image_rgb565_bgr565.h"
 #include "blend_image_rgb565_bgra8888.h"
 #include "blend_image_rgb565_rgba8888.h"
+#include "blend_image_rgb565_gray.h"
 #include "blend_image_rgba8888_bgr565.h"
 #include "blend_image_rgba8888_bgra8888.h"
 #include "blend_image_rgba8888_rgba8888.h"
@@ -207,6 +209,9 @@ ret_t soft_blend_image(bitmap_t* dst, bitmap_t* src, rect_t* dst_r, rect_t* src_
         case BITMAP_FMT_BGRA8888: {
           return blend_image_bgr565_bgra8888(dst, src, dst_r, src_r, alpha);
         }
+        case BITMAP_FMT_GRAY: {
+          return blend_image_bgr565_gray(dst, src, dst_r, src_r, alpha);
+        }
         default:
           break;
       }
@@ -222,6 +227,9 @@ ret_t soft_blend_image(bitmap_t* dst, bitmap_t* src, rect_t* dst_r, rect_t* src_
         }
         case BITMAP_FMT_BGRA8888: {
           return blend_image_rgb565_bgra8888(dst, src, dst_r, src_r, alpha);
+        }
+        case BITMAP_FMT_GRAY: {
+          return blend_image_rgb565_gray(dst, src, dst_r, src_r, alpha);
         }
         default:
           break;
