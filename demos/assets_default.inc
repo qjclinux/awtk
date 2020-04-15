@@ -47,6 +47,7 @@
 #include "assets/default/inc/ui/scroll_bar.data"
 #include "assets/default/inc/ui/lua.data"
 #include "assets/default/inc/ui/linear_gradient.data"
+#include "assets/default/inc/ui/kb_t9.data"
 #include "assets/default/inc/ui/preload.data"
 #include "assets/default/inc/ui/images.data"
 #include "assets/default/inc/ui/soft_keyboard.data"
@@ -506,6 +507,7 @@ ret_t assets_init_default(void) {
   assets_manager_add(am, ui_scroll_bar);
   assets_manager_add(am, ui_lua);
   assets_manager_add(am, ui_linear_gradient);
+  assets_manager_add(am, ui_kb_t9);
   assets_manager_add(am, ui_preload);
   assets_manager_add(am, ui_images);
   assets_manager_add(am, ui_soft_keyboard);

@@ -370,6 +370,36 @@ ret_t input_method_commit_text_ex(input_method_t* im, bool_t replace, const char
 ret_t input_method_dispatch_key(input_method_t* im, uint32_t key);
 
 /**
+ * @method input_method_dispatch_preedit
+ * 分发进入预编辑状态的事件。
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_dispatch_preedit(input_method_t* im);
+
+/**
+ * @method input_method_dispatch_preedit_confirm
+ * 分发确认预编辑状态的事件(提交预编辑内容，退出预编辑状态)。
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_dispatch_preedit_confirm(input_method_t* im);
+
+/**
+ * @method input_method_dispatch_preedit_abort
+ * 分发取消预编辑状态的事件(提交预编辑内容，退出预编辑状态)。
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_dispatch_preedit_abort(input_method_t* im);
+
+/**
  * @method input_method_dispatch_candidates
  * 请求显示候选字。
  * @param {input_method_t*} im 输入法对象。

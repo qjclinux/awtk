@@ -47,6 +47,7 @@ extern TK_CONST_DATA_ALIGN(const unsigned char ui_digit_clock[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_scroll_bar[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_lua[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_linear_gradient[]);
+extern TK_CONST_DATA_ALIGN(const unsigned char ui_kb_t9[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_preload[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_images[]);
 extern TK_CONST_DATA_ALIGN(const unsigned char ui_soft_keyboard[]);
@@ -506,6 +507,7 @@ ret_t assets_init_dark(void) {
   assets_manager_add(am, ui_scroll_bar);
   assets_manager_add(am, ui_lua);
   assets_manager_add(am, ui_linear_gradient);
+  assets_manager_add(am, ui_kb_t9);
   assets_manager_add(am, ui_preload);
   assets_manager_add(am, ui_images);
   assets_manager_add(am, ui_soft_keyboard);

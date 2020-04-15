@@ -64,6 +64,7 @@ BEGIN_C_DECLS
  *| 前缀key:        | 键值           |
  *| 前缀hard_key:   | 模拟物理键盘    |
  *| 前缀page:       | 切换到页面      |
+ *| 前缀opt:        | 多个字符选择一个，点击切换到下一个，超时提交字符(用于实现九宫格输入) |
  *
  * 示例：
  * 
@@ -84,6 +85,14 @@ BEGIN_C_DECLS
  * ```xml
  * <button repeat="300" name="hard_key:1" text="1"/>
  * ```
+ 
+ * * 九宫格输入
+ * 
+ * ```xml
+    <button repeat="300" name="opt:._@/#" text="._@/#"/>
+    <button repeat="300" name="opt:abc" text="abc"/>
+    <button repeat="300" name="opt:def" text="def"/>
+ * ```
  * 
  * > 更多用法请参考：
  * [kb_default](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/ui/kb_default.xml)
@@ -94,8 +103,11 @@ typedef struct _keyboard_t {
   window_base_t window;
 
   /*private*/
+  widget_t* last_click_button;
   darray_t action_buttons;
   uint32_t action_info_id;
+  uint32_t timer_id;
+  str_t temp;
 } keyboard_t;
 
 /**

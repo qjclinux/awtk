@@ -29,6 +29,24 @@ ret_t input_method_dispatch(input_method_t* im, event_t* e) {
   return emitter_dispatch(&(im->emitter), e);
 }
 
+ret_t input_method_dispatch_preedit(input_method_t* im) {
+  event_t e = event_init(EVT_IM_PREEDIT, im);
+
+  return input_method_dispatch_to_widget(im, &e);
+}
+
+ret_t input_method_dispatch_preedit_confirm(input_method_t* im) {
+  event_t e = event_init(EVT_IM_PREEDIT_CONFIRM, im);
+
+  return input_method_dispatch_to_widget(im, &e);
+}
+
+ret_t input_method_dispatch_preedit_abort(input_method_t* im) {
+  event_t e = event_init(EVT_IM_PREEDIT_ABORT, im);
+
+  return input_method_dispatch_to_widget(im, &e);
+}
+
 ret_t input_method_dispatch_to_widget(input_method_t* im, event_t* e) {
   return_value_if_fail(im != NULL && im->widget != NULL && e != NULL, RET_BAD_PARAMS);
 
