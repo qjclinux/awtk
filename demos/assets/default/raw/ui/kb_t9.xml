@@ -104,22 +104,20 @@
     </view>
     <view name="chinese" x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
       <button repeat="300" name="opt:，。？！" text="，。？！"/>
-        <button repeat="300" name="opt:ABC" text="ABC"/>
-        <button repeat="300" name="opt:DEF" text="DEF"/>
+        <button repeat="300" name="key:a" text="ABC"/>
+        <button repeat="300" name="key:b" text="DEF"/>
         <button repeat="300" name="key:backspace" style="highlight">
           <image draw_type="icon" image="backspace" x="center" y="middle" w="100%" h="100%"/>
         </button>
-        <button repeat="300" name="opt:" text="GHI"/>
-        <button repeat="300" name="opt:JKL" text="JKL"/>
-        <button repeat="300" name="opt:MNO" text="MNO"/>
+        <button repeat="300" name="key:c:" text="GHI"/>
+        <button repeat="300" name="key:d" text="JKL"/>
+        <button repeat="300" name="key:e" text="MNO"/>
         <button name="page:lower" style="highlight" text="abc"/>
 
-        <button repeat="300" name="opt:PQRS" text="PQRS"/>
-        <button repeat="300" name="opt:TUV" text="TUV"/>
-        <button repeat="300" name="opt:WXYZ" text="WXYZ"/>
-        <button name="page:chinese" style="highlight">
-          <image draw_type="icon" image="zh" x="center" y="middle" w="100%" h="100%"/>
-        </button>
+        <button repeat="300" name="key:f" text="PQRS"/>
+        <button repeat="300" name="key:g" text="TUV"/>
+        <button repeat="300" name="key:h" text="WXYZ"/>
+        <button name="page:symbols" style="highlight" text="#+="/>
         <button repeat="300" name="confirm_preedit" text="-->"/>
         <button repeat="300" name="space" text="Space"/>
         <button name="action" style="highlight" text="Return"/>
