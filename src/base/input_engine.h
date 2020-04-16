@@ -31,6 +31,7 @@ typedef struct _input_engine_t input_engine_t;
 
 typedef ret_t (*input_engine_reset_input_t)(input_engine_t* engine);
 typedef ret_t (*input_engine_input_t)(input_engine_t* engine, int key);
+typedef ret_t (*input_engine_set_lang_t)(input_engine_t* engine, const char* lang);
 
 #define TK_IM_MAX_INPUT_CHARS 15
 #define TK_IM_MAX_CANDIDATE_CHARS 255
@@ -75,6 +76,7 @@ struct _input_engine_t {
 
   /*具体实现需要实现的函数*/
   input_engine_input_t input;
+  input_engine_set_lang_t set_lang;
   input_engine_reset_input_t reset_input;
 };
 
@@ -105,6 +107,17 @@ ret_t input_engine_destroy(input_engine_t* engine);
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_engine_reset_input(input_engine_t* engine);
+
+/**
+ * @engine input_engine_set_lang
+ * 设置语言。
+ * @annotation ["scriptable"]
+ * @param {input_engine_t*} engine 输入法引擎对象。
+ * @param {const char*} lang 语言。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_engine_set_lang(input_engine_t* engine, const char* lang);
 
 /**
  * @method input_engine_input

@@ -22,8 +22,8 @@
 
 #include "t9.h"
 
-int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const char* key, uint32_t key_len,
-                        bool_t exact) {
+int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const char* key,
+                        uint32_t key_len, bool_t exact) {
   int r = 0;
   int32_t low = 0;
   int32_t high = items_nr - 1;
@@ -53,7 +53,7 @@ int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const ch
 static ret_t wbuffer_write_string_if_has_room(wbuffer_t* wb, const char* str) {
   uint32_t len = strlen(str);
 
-  if(wbuffer_has_room(wb, len+1)) {
+  if (wbuffer_has_room(wb, len + 1)) {
     return wbuffer_write_string(wb, str);
   }
 
@@ -63,7 +63,7 @@ static ret_t wbuffer_write_string_if_has_room(wbuffer_t* wb, const char* str) {
 static uint32_t count_words(const char** words) {
   uint32_t n = 0;
 
-  while(words[n] != NULL) n++;
+  while (words[n] != NULL) n++;
 
   return n;
 }
@@ -86,7 +86,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
   if (found >= 0) {
     iter = items + found;
 
-    if(key_len > 1) {
+    if (key_len > 1) {
       nr++;
       wbuffer_write_string_if_has_room(result, iter->pinyin);
     }
@@ -108,7 +108,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
     uint32_t key_len = strlen(key);
 
     iter = items + found;
-    if(key_len > 1) {
+    if (key_len > 1) {
       nr++;
       wbuffer_write_string_if_has_room(result, iter->pinyin);
     }

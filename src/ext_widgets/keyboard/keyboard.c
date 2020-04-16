@@ -29,6 +29,7 @@
 #include "base/input_method.h"
 #include "base/window_manager.h"
 
+#define WIDGET_PROP_IM_LANG "lang"
 #define WIDGET_PROP_PREEDIT_INDEX "preedit_index"
 
 static ret_t keyboard_on_load(void* ctx, event_t* e);
@@ -115,6 +116,13 @@ static ret_t keyboard_set_active_page(widget_t* button, const char* name) {
 
   return_value_if_fail(iter != NULL, RET_FAIL);
   if (pages_set_active_by_name(iter, name) == RET_OK) {
+    value_t v;
+    widget_t* active = widget_get_child(iter, widget_get_value(iter));
+
+    if (widget_get_prop(active, WIDGET_PROP_IM_LANG, &v) == RET_OK) {
+      input_method_set_lang(input_method(), value_str(&v));
+    }
+
     keyboard_focus_first(widget_get_child(iter, PAGES(iter)->active));
   }
 

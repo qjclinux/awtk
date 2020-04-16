@@ -18,15 +18,17 @@
  * 2020-04-16 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "tkc/mem.h"
+#include "tkc/utf8.h"
+#include "tkc/buffer.h"
+#include "base/input_engine.h"
+
+#ifdef WITH_IME_T9
 
 #include "t9.h"
 #include "t9_zh_cn.inc"
 #include "t9_en_us.inc"
 
-#include "tkc/mem.h"
-#include "tkc/utf8.h"
-#include "tkc/buffer.h"
-#include "base/input_engine.h"
 
 typedef struct _input_engine_t9_t {
   input_engine_t input_engine;
@@ -86,6 +88,24 @@ static ret_t input_engine_t9_input(input_engine_t* engine, int c) {
   return RET_OK;
 }
 
+static ret_t input_engine_t9_set_lang(input_engine_t* engine, const char* lang) {
+  input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
+  return_value_if_fail(engine != NULL, RET_BAD_PARAMS);
+
+  log_debug("input_engine_t9_set_lang: %s\n", lang);
+  if (tk_str_ieq(lang, "zh_cn")) {
+    t9->items = s_zh_cn_items;
+    t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
+  } else if (tk_str_ieq(lang, "en_us")) {
+    t9->items = s_en_us_items;
+    t9->items_nr = ARRAY_SIZE(s_en_us_items);
+  } else {
+    log_debug("not support lang:%s\n", lang);
+  }
+
+  return RET_OK;
+}
+
 input_engine_t* input_engine_create(void) {
   input_engine_t9_t* t9 = TKMEM_ZALLOC(input_engine_t9_t);
   input_engine_t* engine = (input_engine_t*)t9;
@@ -95,10 +115,8 @@ input_engine_t* input_engine_create(void) {
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_t9_reset_input;
   engine->input = input_engine_t9_input;
+  engine->set_lang = input_engine_t9_set_lang;
 
-//  t9->items = s_zh_cn_items;
-//  t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
-  
   t9->items = s_en_us_items;
   t9->items_nr = ARRAY_SIZE(s_en_us_items);
 
@@ -112,3 +130,6 @@ ret_t input_engine_destroy(input_engine_t* engine) {
 
   return RET_OK;
 }
+
+#endif/*WITH_IME_T9*/
+

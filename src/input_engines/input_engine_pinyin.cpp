@@ -24,6 +24,8 @@
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
 
+#ifdef WITH_IME_PINYIN 
+
 #include "pinyinime.h"
 
 #define MAX_WORD_LEN 32
@@ -104,3 +106,5 @@ ret_t input_engine_destroy(input_engine_t* engine) {
 
   return RET_OK;
 }
+
+#endif/*WITH_IME_PINYIN*/

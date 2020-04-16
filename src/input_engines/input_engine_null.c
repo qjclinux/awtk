@@ -23,6 +23,8 @@
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
 
+#ifdef WITH_IME_NULL
+
 static ret_t input_engine_null_reset_input(input_engine_t* engine) {
   (void)engine;
 
@@ -68,3 +70,5 @@ ret_t input_engine_destroy(input_engine_t* engine) {
 
   return RET_OK;
 }
+#endif/*WITH_IME_NULL*/
+

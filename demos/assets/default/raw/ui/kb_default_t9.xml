@@ -56,25 +56,26 @@
         <button repeat="300" name="?" text="?"/>
         <button name="page:number" style="highlight" text="123"/>
     </view>
-    <view name="lower" x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
-      <button repeat="300" name="opt:._@/#" text="._@/#"/>
-        <button repeat="300" name="opt:abc" text="abc"/>
-        <button repeat="300" name="opt:def" text="def"/>
+    <view name="lower" lang="en_us" 
+      x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
+      <button repeat="300" name="," text=","/>
+        <button repeat="300" name="key:1" text="abc"/>
+        <button repeat="300" name="key:2" text="def"/>
         <button repeat="300" name="key:backspace" style="highlight">
           <image draw_type="icon" image="backspace" x="center" y="middle" w="100%" h="100%"/>
         </button>
-        <button repeat="300" name="opt:ghi" text="ghi"/>
-        <button repeat="300" name="opt:jkl" text="jkl"/>
-        <button repeat="300" name="opt:mno" text="mno"/>
+        <button repeat="300" name="key:3" text="ghi"/>
+        <button repeat="300" name="key:4" text="jkl"/>
+        <button repeat="300" name="key:5" text="mno"/>
         <button name="page:upper" style="highlight" text="ABC"/>
 
-        <button repeat="300" name="opt:pqrs" text="pqrs"/>
-        <button repeat="300" name="opt:tuv" text="tuv"/>
-        <button repeat="300" name="opt:wxyz" text="wxyz"/>
+        <button repeat="300" name="key:6" text="pqrs"/>
+        <button repeat="300" name="key:7" text="tuv"/>
+        <button repeat="300" name="key:8" text="wxyz"/>
         <button name="page:chinese" style="highlight">
           <image draw_type="icon" image="zh" x="center" y="middle" w="100%" h="100%"/>
         </button>
-        <button repeat="300" name="confirm_preedit" text="-->"/>
+        <button repeat="300" name="opt:.?!" text=".?!"/>
         <button repeat="300" name="space" text="Space"/>
         <button name="action" style="highlight" text="Return"/>
         <button name="page:number" style="highlight" text="123"/>
@@ -102,7 +103,8 @@
         <button name="action" style="highlight" text="Return"/>
         <button name="page:number" style="highlight" text="123"/>
     </view>
-    <view name="chinese" x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
+    <view name="chinese" lang="zh_cn" 
+      x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
         <button repeat="300" name="，" text="，"/>
         <button repeat="300" name="key:1" text="ABC"/>
         <button repeat="300" name="key:2" text="DEF"/>

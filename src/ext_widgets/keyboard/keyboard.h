@@ -89,11 +89,32 @@ BEGIN_C_DECLS
  * * 九宫格输入
  * 
  * ```xml
-    <button repeat="300" name="opt:._@/#" text="._@/#"/>
-    <button repeat="300" name="opt:abc" text="abc"/>
-    <button repeat="300" name="opt:def" text="def"/>
+ *   <button repeat="300" name="opt:._@/#" text="._@/#"/>
+ *   <button repeat="300" name="opt:abc" text="abc"/>
+ *   <button repeat="300" name="opt:def" text="def"/>
  * ```
- * 
+ *
+ *
+ * * 输入语言切换
+ *
+ *  有的输入法，同时支持输入多种语言。
+ *  比如T9，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
+ *
+ * 可以在pages的页面里指定lang属性，切换到该页面时会设置输入法的语言。如：
+ *
+ * ```xml
+ * <pages x="0" y="bottom" w="100%" h="-28" active="2">
+ *   <view name="lower" lang="en_us"
+ *     x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
+ *     ...
+ *    </view>
+ *    <view name="chinese" lang="zh_cn"
+ *     x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
+ *     ...
+ *    </view>
+ * </pages>
+ * ```
+ *
  * > 更多用法请参考：
  * [kb_default](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/ui/kb_default.xml)
  *

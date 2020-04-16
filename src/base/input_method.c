@@ -153,6 +153,15 @@ ret_t input_method_dispatch_key(input_method_t* im, uint32_t key) {
   return input_method_dispatch_key_only(im, key);
 }
 
+ret_t input_method_set_lang(input_method_t* im, const char* lang) {
+  return_value_if_fail(im != NULL, RET_BAD_PARAMS);
+  if (im->engine != NULL) {
+    return input_engine_set_lang(im->engine, lang);
+  }
+
+  return RET_FAIL;
+}
+
 ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uint32_t nr) {
   im_candidates_event_t ce;
 

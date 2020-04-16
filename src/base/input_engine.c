@@ -36,6 +36,17 @@ ret_t input_engine_reset_input(input_engine_t* engine) {
   return ret;
 }
 
+ret_t input_engine_set_lang(input_engine_t* engine, const char* lang) {
+  ret_t ret = RET_OK;
+  return_value_if_fail(engine != NULL, RET_BAD_PARAMS);
+
+  if (engine->set_lang) {
+    ret = engine->set_lang(engine, lang);
+  }
+
+  return ret;
+}
+
 ret_t input_engine_input(input_engine_t* engine, int key) {
   ret_t ret = RET_OK;
   return_value_if_fail(engine != NULL, RET_BAD_PARAMS);

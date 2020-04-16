@@ -341,11 +341,26 @@ ret_t input_method_dispatch_action(input_method_t* im);
  * 提交输入文本。
  * @annotation ["scriptable"]
  * @param {input_method_t*} im 输入法对象。
- * @param {char*} text 文本。
+ * @param {const char*} text 文本。
  *
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_method_commit_text(input_method_t* im, const char* text);
+
+/**
+ * @method input_method_set_lang
+ * 设置语言。
+ *
+ * > 有的输入法，同时支持输入多种语言。
+ * > 比如T9，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
+ *
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ * @param {const char*} lang 语言。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_set_lang(input_method_t* im, const char* lang);
 
 /**
  * @method input_method_commit_text_ex

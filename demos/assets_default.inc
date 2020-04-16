@@ -54,6 +54,8 @@
 #include "assets/default/inc/ui/edit.data"
 #include "assets/default/inc/ui/menu_up_left.data"
 #include "assets/default/inc/ui/locale.data"
+#include "assets/default/inc/ui/kb_ascii_t9.data"
+#include "assets/default/inc/ui/kb_default_t9.data"
 #include "assets/default/inc/ui/kb_int.data"
 #include "assets/default/inc/ui/tab_control.data"
 #include "assets/default/inc/ui/slide_view_v2.data"
@@ -514,6 +516,8 @@ ret_t assets_init_default(void) {
   assets_manager_add(am, ui_edit);
   assets_manager_add(am, ui_menu_up_left);
   assets_manager_add(am, ui_locale);
+  assets_manager_add(am, ui_kb_ascii_t9);
+  assets_manager_add(am, ui_kb_default_t9);
   assets_manager_add(am, ui_kb_int);
   assets_manager_add(am, ui_tab_control);
   assets_manager_add(am, ui_slide_view_v2);
