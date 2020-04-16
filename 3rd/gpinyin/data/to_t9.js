@@ -54,6 +54,15 @@ function saveResult(filename, result) {
   console.log(`write result to ${filename}`);
 }
 
+function getPinyin(words) {
+  let py = '';
+  for(let i = 3; i < words.length; i++) {
+    py += words[i];
+  }
+
+  return py;
+}
+
 function toT9(filename, lang) {
   let obj = {}
   let result = ''
@@ -65,7 +74,7 @@ function toT9(filename, lang) {
     const char = words[0];
     const freq = parseFloat(words[1]);
     const tw = words[2] === '1';
-    const py = words[3];
+    const py = getPinyin(words);
     const key = mapStr(py);
     const notExist = !obj[key];
 
@@ -77,10 +86,7 @@ function toT9(filename, lang) {
       return;
     }
 
-    if (words.length !== 4) {
-      return;
-    }
-
+    console.log(`${py} => ${key}`);
     if (notExist) {
       obj[key] = {
         py: '',
@@ -130,7 +136,9 @@ function toT9(filename, lang) {
   result += `static const t9_item_info_t s_${lang}_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
-    result += `  {"${key}", s_${key}},\n`
+    let py = iter.py.split(' ')[1];
+
+    result += `  {"${key}", "${py}", s_${key}},\n`
   });
 
   result += '};\n';

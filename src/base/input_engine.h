@@ -32,8 +32,8 @@ typedef struct _input_engine_t input_engine_t;
 typedef ret_t (*input_engine_reset_input_t)(input_engine_t* engine);
 typedef ret_t (*input_engine_input_t)(input_engine_t* engine, int key);
 
-#define TK_IM_MAX_INPUT_CHARS 11
-#define TK_IM_MAX_CANDIDATE_CHARS 127
+#define TK_IM_MAX_INPUT_CHARS 15
+#define TK_IM_MAX_CANDIDATE_CHARS 255
 
 /**
  * @class input_engine_t

@@ -31,6 +31,7 @@ BEGIN_C_DECLS
 
 typedef struct _t9_item_info_t {
   const char* key;
+  const char* pinyin;
   const char** words;
 } t9_item_info_t;
 

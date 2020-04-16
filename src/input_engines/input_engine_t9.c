@@ -27,26 +27,55 @@
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
 
-#define MAX_WORD_LEN 32
-
 typedef struct _input_engine_t9_t {
   input_engine_t input_engine;
 
-  const t9_item_info_t* items;
   uint32_t items_nr;
+  const t9_item_info_t* items;
 } input_engine_t9_t;
 
 static ret_t input_engine_t9_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
+static const char* num_chars[] = {
+    "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "",
+};
+
+static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
+  char str[2];
+  uint32_t n = 0;
+  const char* p = NULL;
+  uint32_t index = c - '0';
+  return_value_if_fail(index < 9, RET_BAD_PARAMS);
+
+  p = num_chars[index];
+  memset(str, 0x00, sizeof(str));
+
+  while (*p) {
+    str[0] = *p;
+    if (wbuffer_write_string(wb, str) != RET_OK) {
+      break;
+    }
+    n++;
+    p++;
+  }
+
+  return n;
+}
+
 static ret_t input_engine_t9_input(input_engine_t* engine, int c) {
   wbuffer_t wb;
   str_t* keys = &(engine->keys);
   input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
-  wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
 
-  engine->candidates_nr = t9_search(t9->items, t9->items_nr, keys->str, &wb);
+  wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
+  if (keys->size == 1) {
+    engine->candidates_nr = input_engine_t9_add_chars(engine, keys->str[0], &wb);
+  } else {
+    engine->candidates_nr = 0;
+  }
+  engine->candidates_nr += t9_search(t9->items, t9->items_nr, keys->str, &wb);
 
   log_debug("key=%s %d\n", keys->str, engine->candidates_nr);
   if (engine->candidates_nr == 0) {
