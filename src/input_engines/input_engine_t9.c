@@ -21,6 +21,7 @@
 
 #include "t9.h"
 #include "t9_zh_cn.inc"
+#include "t9_en_us.inc"
 
 #include "tkc/mem.h"
 #include "tkc/utf8.h"
@@ -95,8 +96,11 @@ input_engine_t* input_engine_create(void) {
   engine->reset_input = input_engine_t9_reset_input;
   engine->input = input_engine_t9_input;
 
-  t9->items = s_zh_cn_items;
-  t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
+//  t9->items = s_zh_cn_items;
+//  t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
+  
+  t9->items = s_en_us_items;
+  t9->items_nr = ARRAY_SIZE(s_en_us_items);
 
   return engine;
 }
