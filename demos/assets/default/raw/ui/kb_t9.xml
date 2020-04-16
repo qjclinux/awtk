@@ -103,7 +103,7 @@
         <button name="page:number" style="highlight" text="123"/>
     </view>
     <view name="chinese" x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
-      <button repeat="300" name="opt:，。？！" text="，。？！"/>
+        <button repeat="300" name="，" text="，"/>
         <button repeat="300" name="key:1" text="ABC"/>
         <button repeat="300" name="key:2" text="DEF"/>
         <button repeat="300" name="key:backspace" style="highlight">
@@ -118,7 +118,7 @@
         <button repeat="300" name="key:7" text="TUV"/>
         <button repeat="300" name="key:8" text="WXYZ"/>
         <button name="page:symbols" style="highlight" text="#+="/>
-        <button repeat="300" name="confirm_preedit" text="-->"/>
+        <button repeat="300" name="opt:。？！" text="。？！"/>
         <button repeat="300" name="space" text="Space"/>
         <button name="action" style="highlight" text="Return"/>
         <button name="page:number" style="highlight" text="123"/>

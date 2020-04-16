@@ -101,6 +101,7 @@ function toT9(filename, lang) {
     }
 
     value.items.push({
+      py : py,
       char: char,
       freq: freq
     });
@@ -136,8 +137,7 @@ function toT9(filename, lang) {
   result += `static const t9_item_info_t s_${lang}_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
-    let py = iter.py.split(' ')[1];
-
+    let py = iter.items[0].py;
     result += `  {"${key}", "${py}", s_${key}},\n`
   });
 
