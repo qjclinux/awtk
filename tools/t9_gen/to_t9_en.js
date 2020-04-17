@@ -1,7 +1,6 @@
 const fs = require('fs');
 const helper = require('./helper');
 
-
 function toT9(filename, lang) {
   let obj = {}
   let result = ''
@@ -22,7 +21,7 @@ function toT9(filename, lang) {
     if (notExist) {
       obj[key] = {
         key: key,
-        word:'',
+        word: '',
         items: []
       }
     }
@@ -33,7 +32,7 @@ function toT9(filename, lang) {
     }
 
     value.items.push({
-      word : word,
+      word: word,
       freq: freq
     });
   });
@@ -57,7 +56,7 @@ function toT9(filename, lang) {
     });
     result += '  NULL\n';
     result += '};\n';
-    
+
     arr.push(value);
   }
 
@@ -78,4 +77,3 @@ function toT9(filename, lang) {
 }
 
 toT9('english_words.txt', 'en_us');
-

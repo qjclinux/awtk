@@ -113,6 +113,15 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
       wbuffer_write_string_if_has_room(result, iter->pinyin);
     }
 
+    while (found > 0) {
+      iter = items + found - 1;
+      if (strncmp(iter->key, key, key_len) == 0) {
+        found--;
+      } else {
+        break;
+      }
+    }
+    
     for (i = 0; i < 5; i++) {
       for (k = found; k < items_nr; k++) {
         iter = items + k;

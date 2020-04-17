@@ -1,13 +1,13 @@
 const fs = require('fs');
 const helper = require('./helper');
 
-function getPinyin(words) {
-  let py = '';
-  for(let i = 3; i < words.length; i++) {
-    py += words[i];
+function mergePinyin(words) {
+  let pinyin = '';
+  for (let i = 3; i < words.length; i++) {
+    pinyin += words[i];
   }
 
-  return py;
+  return pinyin;
 }
 
 function toT9(filename, lang) {
@@ -21,34 +21,41 @@ function toT9(filename, lang) {
     const char = words[0];
     const freq = parseFloat(words[1]);
     const tw = words[2] === '1';
-    const py = getPinyin(words);
-    const key = helper.mapStr(py);
+    const pinyin = mergePinyin(words);
+    const key = helper.mapStr(pinyin);
     const notExist = !obj[key];
 
     if (!key) {
       return;
     }
 
-    if (tw) {
+    if ((lang === 'zh_cn') && tw) {
+      /*skip tranditional words if lang === 'zh_cn'*/
+      return;
+    }
+    
+    if ((lang !== 'zh_cn') && !tw) {
+      /*skip simpile Chinese words if lang === 'zh_cn'*/
       return;
     }
 
-    console.log(`${py} => ${key}`);
+    console.log(`${pinyin} => ${key}`);
+
     if (notExist) {
       obj[key] = {
-        py: '',
+        pinyin: '',
         key: key,
         items: []
       }
     }
 
     let value = obj[key];
-    if (value.py.indexOf(' ' + py) < 0) {
-      value.py = value.py + ' ' + py;
+    if (value.pinyin.indexOf(' ' + pinyin) < 0) {
+      value.pinyin = value.pinyin + ' ' + pinyin;
     }
 
     value.items.push({
-      py : py,
+      pinyin: pinyin,
       char: char,
       freq: freq
     });
@@ -66,14 +73,14 @@ function toT9(filename, lang) {
       return b.freq - a.freq;
     });
 
-    result += `/*${value.py}*/\n`;
+    result += `/*${value.pinyin}*/\n`;
     result += `static const char* s_${key}[] = {\n`
     value.items.forEach(iter => {
       result += `  \"${iter.char}\",\n`;
     });
     result += '  NULL\n';
     result += '};\n';
-    
+
     arr.push(value);
   }
 
@@ -84,8 +91,8 @@ function toT9(filename, lang) {
   result += `static const t9_item_info_t s_${lang}_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
-    let py = iter.items[0].py;
-    result += `  {"${key}", "${py}", s_${key}},\n`
+    let pinyin = iter.items[0].pinyin;
+    result += `  {"${key}", "${pinyin}", s_${key}},\n`
   });
 
   result += '};\n';
@@ -94,4 +101,3 @@ function toT9(filename, lang) {
 }
 
 toT9('chinese_words.txt', 'zh_cn');
-
