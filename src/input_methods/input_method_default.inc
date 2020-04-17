@@ -64,11 +64,19 @@ static const char* input_type_to_keyboard_name(int32_t input_type) {
     }
     case INPUT_EMAIL:
     case INPUT_PASSWORD: {
+#ifdef WITH_IME_T9
+      keyboard = "kb_ascii_t9";
+#else
       keyboard = "kb_ascii";
+#endif/*WITH_IME_T9*/
       break;
     }
     default: {
+#ifdef WITH_IME_T9
+      keyboard = "kb_default_t9";
+#else
       keyboard = "kb_default";
+#endif/*WITH_IME_T9*/
       break;
     }
   }
