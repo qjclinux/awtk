@@ -68,6 +68,7 @@ ret_t input_engine_input(input_engine_t* engine, int key) {
       engine->keys.size--;
       engine->keys.str[engine->keys.size] = '\0';
     } else {
+      input_engine_reset_input(engine);
       return RET_FAIL;
     }
   } else {

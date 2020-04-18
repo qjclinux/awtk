@@ -1,15 +1,6 @@
 const fs = require('fs');
 const helper = require('./helper');
 
-function mergePinyin(words) {
-  let pinyin = '';
-  for (let i = 3; i < words.length; i++) {
-    pinyin += words[i];
-  }
-
-  return pinyin;
-}
-
 function genPinYinTable(obj) {
   let arr = []
   let result = ''
@@ -24,11 +15,10 @@ function genPinYinTable(obj) {
       return b.freq - a.freq;
     });
 
-    result += `/*${value.pinyin}*/\n`;
-    result += `static const char* s_${key}[] = {\n`
-    for(let pinyin in value.pinyin) {
-      result += `  \"${pinyin}\",\n`;
-    }
+    result += `static const char* s_py_${key}[] = {\n`
+    value.items.forEach(iter => {
+      result += `  \"${iter.char}\",\n`;
+    });
     result += '  NULL\n';
     result += '};\n';
 
@@ -39,19 +29,17 @@ function genPinYinTable(obj) {
     return a.key.localeCompare(b.key);
   });
 
-  result += `static const t9_item_info_t s_t9ext_numbers_pinyin[] = {\n`;
+  result += `static const t9_item_info_t s_pinyin_chinese_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
-    let pinyin = iter.items[0].pinyin;
-    result += `  {"${key}", NULL, s_${key}},\n`
+    result += `  {"${key}", NULL, s_py_${key}},\n`
   });
-
   result += '};\n';
 
-  helper.saveResult(`t9ext_zh_cn.inc`, result);
+  helper.saveResult(`pinyin_table.inc`, result);
 }
 
-function toT9(filename, onlySimpleChinese) {
+function toPinyin(filename, onlySimpleChinese) {
   let obj = {}
   const content = fs.readFileSync(filename, "utf16le");
   const lines = content.split('\n');
@@ -61,8 +49,8 @@ function toT9(filename, onlySimpleChinese) {
     const char = words[0];
     const freq = parseFloat(words[1]);
     const tw = words[2] === '1';
-    const pinyin = mergePinyin(words);
-    const key = helper.mapStr(pinyin);
+    const pinyin = helper.mergePinyin(words);
+    const key = pinyin;
     const notExist = !obj[key];
 
     if (!key) {
@@ -73,27 +61,22 @@ function toT9(filename, onlySimpleChinese) {
       return;
     }
 
-    console.log(`${pinyin} => ${key}`);
-
     if (notExist) {
       obj[key] = {
         key: key,
         items: [],
-        pinyin: {}
       }
     }
 
     let value = obj[key];
-    value.pinyin[pinyin] = true
-
     value.items.push({
-      pinyin: pinyin,
       char: char,
+      pinyin: pinyin,
       freq: freq
     });
   });
 
-  genPinYinTable(obj)
+  genPinYinTable(obj);
 }
 
-toT9('chinese_words.txt', true);
+toPinyin('chinese_words.txt', true);

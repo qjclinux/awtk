@@ -51,8 +51,13 @@ int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const ch
 }
 
 static ret_t wbuffer_write_string_if_has_room(wbuffer_t* wb, const char* str) {
-  uint32_t len = strlen(str);
+  uint32_t len = 0;
 
+  if(str == NULL) {
+    return RET_OK;
+  }
+
+  len = strlen(str);
   if (wbuffer_has_room(wb, len + 1)) {
     return wbuffer_write_string(wb, str);
   }
@@ -69,7 +74,7 @@ static uint32_t count_words(const char** words) {
 }
 
 uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* key,
-                   wbuffer_t* result) {
+                   wbuffer_t* result, bool_t exact) {
   uint32_t i = 0;
   uint32_t nr = 0;
   int32_t found = 0;
@@ -82,6 +87,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
     return 0;
   }
 
+  /*match exact*/
   found = t9_search_index(items, items_nr, key, key_len, TRUE);
   if (found >= 0) {
     iter = items + found;
@@ -102,6 +108,11 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
     return nr;
   }
 
+  if (exact) {
+    return nr;
+  }
+
+  /*match prefix*/
   found = t9_search_index(items, items_nr, key, key_len, FALSE);
   if (found >= 0) {
     uint32_t k = 0;

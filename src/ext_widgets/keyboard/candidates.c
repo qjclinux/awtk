@@ -29,6 +29,7 @@
 #include "base/widget_vtable.h"
 
 static ret_t candidates_on_im_candidates_event(void* ctx, event_t* e);
+
 static ret_t candidates_on_button_focused(void* ctx, event_t* e) {
   char str[32];
   widget_t* button = WIDGET(e->target);
@@ -196,14 +197,14 @@ static ret_t candidates_on_paint_self(widget_t* widget, canvas_t* c) {
 static ret_t candidates_on_event(widget_t* widget, event_t* e) {
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
-  
-  if(e->type == EVT_WINDOW_OPEN) {
-    if(candidates->pre) {
+
+  if (e->type == EVT_WINDOW_OPEN) {
+    if (candidates->pre) {
       candidates->event_id = input_method_on(input_method(), EVT_IM_SHOW_PRE_CANDIDATES,
-                                         candidates_on_im_candidates_event, candidates);
+                                             candidates_on_im_candidates_event, candidates);
     } else {
       candidates->event_id = input_method_on(input_method(), EVT_IM_SHOW_CANDIDATES,
-                                         candidates_on_im_candidates_event, candidates);
+                                             candidates_on_im_candidates_event, candidates);
     }
   }
 

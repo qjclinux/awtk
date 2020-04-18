@@ -36,7 +36,7 @@ typedef struct _t9_item_info_t {
 } t9_item_info_t;
 
 uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* keys,
-                   wbuffer_t* result);
+                   wbuffer_t* result, bool_t exact);
 
 END_C_DECLS
 
