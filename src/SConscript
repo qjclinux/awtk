@@ -68,6 +68,9 @@ elif os.environ['INPUT_ENGINE'] == 't9ext':
 elif os.environ['INPUT_ENGINE'] == 't9':
   BASE_SOURCES += Glob('input_engines/t9.c')
   BASE_SOURCES += Glob('input_engines/input_engine_t9.c')
+elif os.environ['INPUT_ENGINE'] == 'spinyin':
+  BASE_SOURCES += Glob('input_engines/t9.c')
+  BASE_SOURCES += Glob('input_engines/input_engine_spinyin.c')
 else:
   BASE_SOURCES += Glob('input_engines/input_engine_pinyin.cpp')
 

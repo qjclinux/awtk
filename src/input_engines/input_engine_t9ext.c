@@ -94,7 +94,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     }
 
     t9->pre_candidates_nr += t9_search(items, items_nr, keys, &wb, FALSE);
-    if(t9->pre_candidates_nr == 0) {
+    if (t9->pre_candidates_nr == 0) {
       input_engine_reset_input(engine);
     } else {
       input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
@@ -105,7 +105,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
 
     wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
     engine->candidates_nr = t9_search(items, items_nr, keys, &wb, TRUE);
-    if(engine->candidates_nr == 0) {
+    if (engine->candidates_nr == 0) {
       engine->candidates_nr = 1;
       wbuffer_write_string(&wb, keys);
     }

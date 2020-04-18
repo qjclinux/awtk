@@ -35,6 +35,7 @@ TK_DEMO_ROOT  = joinPath(TK_ROOT, 'demos')
 GTEST_ROOT    = joinPath(TK_ROOT, '3rd/gtest/googletest')
 
 INPUT_ENGINE='null'
+INPUT_ENGINE='spinyin'
 #INPUT_ENGINE='t9'
 #INPUT_ENGINE='t9ext'
 #INPUT_ENGINE='pinyin'
@@ -92,6 +93,8 @@ elif INPUT_ENGINE == 't9ext' :
     COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_IME_T9EXT'
 elif INPUT_ENGINE == 'pinyin' :
     COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_IME_PINYIN '
+elif INPUT_ENGINE == 'spinyin' :
+    COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_IME_SPINYIN '
 elif INPUT_ENGINE == 'null' :
     COMMON_CCFLAGS = COMMON_CCFLAGS + ' -DWITH_IME_NULL '
 

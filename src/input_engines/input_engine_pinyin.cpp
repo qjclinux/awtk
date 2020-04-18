@@ -70,7 +70,7 @@ static ret_t input_engine_pinyin_search(input_engine_t* engine, const char* keys
   uint32_t nr = im_search(keys, keys_size);
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
 
-  if(keys_size == 0) {
+  if (keys_size == 0) {
     input_engine_reset_input(engine);
     input_method_dispatch_candidates(engine->im, engine->candidates, 0);
 

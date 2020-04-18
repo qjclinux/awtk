@@ -68,7 +68,7 @@ typedef struct _candidates_t {
    * > 从预候选字列表中选择拼音，再查询拼音对应的候选字列表。
    */
   bool_t pre;
-  
+
   /**
    * @property {bool_t} select_by_num
    * @annotation ["set_prop","get_prop","readable","persitent","design","scriptable"]

@@ -53,7 +53,7 @@ int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const ch
 static ret_t wbuffer_write_string_if_has_room(wbuffer_t* wb, const char* str) {
   uint32_t len = 0;
 
-  if(str == NULL) {
+  if (str == NULL) {
     return RET_OK;
   }
 
