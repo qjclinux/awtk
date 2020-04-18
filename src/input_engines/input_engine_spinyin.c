@@ -26,7 +26,7 @@
 
 #ifdef WITH_IME_SPINYIN
 
-#include "t9.h"
+#include "ime_utils.h"
 #include "pinyin_table.inc"
 
 static ret_t input_engine_spinyin_reset_input(input_engine_t* engine) {
@@ -38,7 +38,7 @@ static ret_t input_engine_spinyin_reset_input(input_engine_t* engine) {
 static ret_t input_engine_spinyin_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
   uint32_t keys_size = strlen(keys);
-  const t9_item_info_t* items = s_pinyin_chinese_items;
+  const table_entry_t* items = s_pinyin_chinese_items;
   uint32_t items_nr = ARRAY_SIZE(s_pinyin_chinese_items);
 
   if (keys_size < 1) {
@@ -47,7 +47,7 @@ static ret_t input_engine_spinyin_search(input_engine_t* engine, const char* key
   }
 
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-  engine->candidates_nr = t9_search(items, items_nr, keys, &wb, FALSE);
+  engine->candidates_nr = table_search(items, items_nr, keys, &wb, FALSE);
   if (engine->candidates_nr == 0) {
     engine->candidates_nr = 1;
     wbuffer_write_string(&wb, keys);

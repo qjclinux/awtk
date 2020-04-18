@@ -25,7 +25,7 @@
 
 #ifdef WITH_IME_T9
 
-#include "t9.h"
+#include "ime_utils.h"
 #include "t9_zh_cn.inc"
 #include "t9_en_us.inc"
 
@@ -33,7 +33,7 @@ typedef struct _input_engine_t9_t {
   input_engine_t input_engine;
 
   uint32_t items_nr;
-  const t9_item_info_t* items;
+  const table_entry_t* items;
 } input_engine_t9_t;
 
 static ret_t input_engine_t9_reset_input(input_engine_t* engine) {
@@ -66,7 +66,7 @@ static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t*
   return n;
 }
 
-static ret_t input_engine_t9_search(input_engine_t* engine, const char* keys) {
+static ret_t input_engine_table_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
   uint32_t keys_size = strlen(keys);
   input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
@@ -77,7 +77,7 @@ static ret_t input_engine_t9_search(input_engine_t* engine, const char* keys) {
   } else {
     engine->candidates_nr = 0;
   }
-  engine->candidates_nr += t9_search(t9->items, t9->items_nr, keys, &wb, FALSE);
+  engine->candidates_nr += table_search(t9->items, t9->items_nr, keys, &wb, FALSE);
 
   log_debug("key=%s %d\n", keys, engine->candidates_nr);
   if (engine->candidates_nr == 0) {
@@ -115,7 +115,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_t9_reset_input;
-  engine->search = input_engine_t9_search;
+  engine->search = input_engine_table_search;
   engine->set_lang = input_engine_t9_set_lang;
   engine->im = im;
 

@@ -20,9 +20,9 @@
  *
  */
 
-#include "t9.h"
+#include "ime_utils.h"
 
-int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const char* key,
+int32_t table_search_index(const table_entry_t* items, uint32_t items_nr, const char* key,
                         uint32_t key_len, bool_t exact) {
   int r = 0;
   int32_t low = 0;
@@ -30,7 +30,7 @@ int32_t t9_search_index(const t9_item_info_t* items, uint32_t items_nr, const ch
 
   while (low <= high) {
     uint32_t mid = (low + high) / 2;
-    const t9_item_info_t* iter = items + mid;
+    const table_entry_t* iter = items + mid;
 
     if (exact) {
       r = strcmp(iter->key, key);
@@ -73,13 +73,13 @@ static uint32_t count_words(const char** words) {
   return n;
 }
 
-uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* key,
+uint32_t table_search(const table_entry_t* items, uint32_t items_nr, const char* key,
                    wbuffer_t* result, bool_t exact) {
   uint32_t i = 0;
   uint32_t nr = 0;
   int32_t found = 0;
   uint32_t key_len = 0;
-  const t9_item_info_t* iter = NULL;
+  const table_entry_t* iter = NULL;
   return_value_if_fail(items != NULL && key != NULL && result != NULL, 0);
 
   key_len = strlen(key);
@@ -88,13 +88,13 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
   }
 
   /*match exact*/
-  found = t9_search_index(items, items_nr, key, key_len, TRUE);
+  found = table_search_index(items, items_nr, key, key_len, TRUE);
   if (found >= 0) {
     iter = items + found;
 
     if (key_len > 1) {
       nr++;
-      wbuffer_write_string_if_has_room(result, iter->pinyin);
+      wbuffer_write_string_if_has_room(result, iter->memo);
     }
 
     while (iter->words[i] != NULL) {
@@ -113,7 +113,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
   }
 
   /*match prefix*/
-  found = t9_search_index(items, items_nr, key, key_len, FALSE);
+  found = table_search_index(items, items_nr, key, key_len, FALSE);
   if (found >= 0) {
     uint32_t k = 0;
     uint32_t key_len = strlen(key);
@@ -121,7 +121,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
     iter = items + found;
     if (key_len > 1) {
       nr++;
-      wbuffer_write_string_if_has_room(result, iter->pinyin);
+      wbuffer_write_string_if_has_room(result, iter->memo);
     }
 
     while (found > 0) {

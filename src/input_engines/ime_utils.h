@@ -24,20 +24,20 @@
 #include "tkc/utf8.h"
 #include "tkc/buffer.h"
 
-#ifndef TK_T9_H
-#define TK_T9_H
+#ifndef TK_IME_UTILS
+#define TK_IME_UTILS
 
 BEGIN_C_DECLS
 
-typedef struct _t9_item_info_t {
+typedef struct _table_entry_t {
   const char* key;
-  const char* pinyin;
+  const char* memo;
   const char** words;
-} t9_item_info_t;
+} table_entry_t;
 
-uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* keys,
+uint32_t table_search(const table_entry_t* items, uint32_t items_nr, const char* keys,
                    wbuffer_t* result, bool_t exact);
 
 END_C_DECLS
 
-#endif /*TK_T9_H*/
+#endif /*TK_IME_UTILS*/

@@ -29,7 +29,7 @@ function genPinYinTable(obj) {
     return a.key.localeCompare(b.key);
   });
 
-  result += `static const t9_item_info_t s_pinyin_chinese_items[] = {\n`;
+  result += `static const table_entry_t s_pinyin_chinese_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
     result += `  {"${key}", NULL, s_py_${key}},\n`

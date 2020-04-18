@@ -26,7 +26,7 @@
 
 #ifdef WITH_IME_T9EXT
 
-#include "t9.h"
+#include "ime_utils.h"
 #include "t9ext_zh_cn.inc"
 #include "pinyin_table.inc"
 
@@ -83,7 +83,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
   }
 
   if (isdigit(keys[0])) {
-    const t9_item_info_t* items = s_t9ext_numbers_pinyin;
+    const table_entry_t* items = s_t9ext_numbers_pinyin;
     uint32_t items_nr = ARRAY_SIZE(s_t9ext_numbers_pinyin);
 
     wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
@@ -93,18 +93,18 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
       t9->pre_candidates_nr = 0;
     }
 
-    t9->pre_candidates_nr += t9_search(items, items_nr, keys, &wb, FALSE);
+    t9->pre_candidates_nr += table_search(items, items_nr, keys, &wb, FALSE);
     if (t9->pre_candidates_nr == 0) {
       input_engine_reset_input(engine);
     } else {
       input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
     }
   } else {
-    const t9_item_info_t* items = s_pinyin_chinese_items;
+    const table_entry_t* items = s_pinyin_chinese_items;
     uint32_t items_nr = ARRAY_SIZE(s_pinyin_chinese_items);
 
     wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-    engine->candidates_nr = t9_search(items, items_nr, keys, &wb, TRUE);
+    engine->candidates_nr = table_search(items, items_nr, keys, &wb, TRUE);
     if (engine->candidates_nr == 0) {
       engine->candidates_nr = 1;
       wbuffer_write_string(&wb, keys);

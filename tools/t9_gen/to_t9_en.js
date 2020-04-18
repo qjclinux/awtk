@@ -64,7 +64,7 @@ function toT9(filename, lang) {
     return a.key.localeCompare(b.key);
   });
 
-  result += `static const t9_item_info_t s_${lang}_items[] = {\n`;
+  result += `static const table_entry_t s_${lang}_items[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
     let word = iter.items[0].word;

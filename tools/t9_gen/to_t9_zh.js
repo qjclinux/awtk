@@ -73,7 +73,7 @@ function toT9(filename, onlySimpleChinese) {
     return a.key.localeCompare(b.key);
   });
 
-  result += `static const t9_item_info_t s_t9_numbers_pinyin[] = {\n`;
+  result += `static const table_entry_t s_t9_numbers_pinyin[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
     let pinyin = iter.items[0].pinyin;
