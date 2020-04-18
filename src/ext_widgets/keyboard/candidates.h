@@ -59,6 +59,16 @@ BEGIN_C_DECLS
 typedef struct _candidates_t {
   widget_t widget;
 
+  /**
+   * @property {bool_t} pre
+   * @annotation ["set_prop","get_prop","readable","persitent","design","scriptable"]
+   * 是否为预候选字。
+   * 
+   * > 预候选字: 在有的输入法中，比如T9硬键盘输入时，按下12两个键时，预候选字会显示可用的拼音列表。
+   * > 从预候选字列表中选择拼音，再查询拼音对应的候选字列表。
+   */
+  bool_t pre;
+
   /*private*/
   bool_t expanded;
   wh_t normal_h;
@@ -91,6 +101,22 @@ widget_t* candidates_create(widget_t* parent, xy_t x, xy_t y, wh_t w, wh_t h);
  * @return {widget_t*} candidates对象。
  */
 widget_t* candidates_cast(widget_t* widget);
+
+/**
+ * @method candidates_set_pre
+ * 设置是否为预候选字列表。
+ * 
+ * > 为预候选字列表则注册EVT\_IM\_SHOW\_PRE\_CANDIDATES，否则注册EVT\_IM\_SHOW\_CANDIDATES事件。
+ * 
+ * @annotation ["scriptable"]
+ * @param {widget_t*} widget 控件对象。
+ * @param {bool_t}  pre 是否为预候选字列表。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t candidates_set_pre(widget_t* widget, bool_t pre);
+
+#define CANDIDATES_PROP_PRE "pre"
 
 #define CANDIDATES(widget) ((candidates_t*)(candidates_cast(WIDGET(widget))))
 

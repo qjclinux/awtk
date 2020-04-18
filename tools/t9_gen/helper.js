@@ -54,7 +54,18 @@ function saveResult(filename, result) {
   console.log(`write result to ${filename}`);
 }
 
+function mergePinyin(words) {
+  let pinyin = '';
+  for (let i = 3; i < words.length; i++) {
+    pinyin += words[i];
+  }
+
+  return pinyin;
+}
+
+
 module.exports = {
  saveResult:saveResult,
+  mergePinyin : mergePinyin,
   mapStr : mapStr
 };

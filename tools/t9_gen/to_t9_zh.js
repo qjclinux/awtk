@@ -1,16 +1,7 @@
 const fs = require('fs');
 const helper = require('./helper');
 
-function mergePinyin(words) {
-  let pinyin = '';
-  for (let i = 3; i < words.length; i++) {
-    pinyin += words[i];
-  }
-
-  return pinyin;
-}
-
-function toT9(filename, lang) {
+function toT9(filename, onlySimpleChinese) {
   let obj = {}
   let result = ''
   const content = fs.readFileSync(filename, "utf16le");
@@ -21,21 +12,15 @@ function toT9(filename, lang) {
     const char = words[0];
     const freq = parseFloat(words[1]);
     const tw = words[2] === '1';
-    const pinyin = mergePinyin(words);
+    const pinyin = helper.mergePinyin(words);
     const key = helper.mapStr(pinyin);
     const notExist = !obj[key];
 
     if (!key) {
       return;
     }
-
-    if ((lang === 'zh_cn') && tw) {
-      /*skip tranditional words if lang === 'zh_cn'*/
-      return;
-    }
     
-    if ((lang !== 'zh_cn') && !tw) {
-      /*skip simpile Chinese words if lang === 'zh_cn'*/
+    if (onlySimpleChinese && tw) {
       return;
     }
 
@@ -88,7 +73,7 @@ function toT9(filename, lang) {
     return a.key.localeCompare(b.key);
   });
 
-  result += `static const t9_item_info_t s_${lang}_items[] = {\n`;
+  result += `static const t9_item_info_t s_t9_numbers_pinyin[] = {\n`;
   arr.forEach(iter => {
     let key = iter.key;
     let pinyin = iter.items[0].pinyin;
@@ -97,7 +82,7 @@ function toT9(filename, lang) {
 
   result += '};\n';
 
-  helper.saveResult(`t9_${lang}.inc`, result);
+  helper.saveResult(`t9_zh_cn.inc`, result);
 }
 
-toT9('chinese_words.txt', 'zh_cn');
+toT9('chinese_words.txt', true);

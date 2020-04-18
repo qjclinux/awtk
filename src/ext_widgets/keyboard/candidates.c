@@ -28,32 +28,57 @@
 #include "base/system_info.h"
 #include "base/widget_vtable.h"
 
-static ret_t candidates_on_button_click(void* ctx, event_t* e) {
+static ret_t candidates_on_im_candidates_event(void* ctx, event_t* e);
+static ret_t candidates_on_button_focused(void* ctx, event_t* e) {
   char str[32];
+  widget_t* button = WIDGET(e->target);
   input_method_t* im = input_method();
-  wstr_t* text = &(WIDGET(ctx)->text);
-  wchar_t c = text->str[text->size - 1];
+  wstr_t* text = &(button->text);
+  candidates_t* candidates = CANDIDATES(ctx);
   return_value_if_fail(im != NULL && text->size > 0, RET_FAIL);
-
   tk_utf8_from_utf16(text->str, str, sizeof(str) - 1);
-  if (input_method_commit_text(im, str) == RET_OK) {
-    suggest_words_t* suggest_words = im->suggest_words;
-    if (suggest_words && suggest_words_find(suggest_words, c) == RET_OK) {
-      input_method_dispatch_candidates(im, suggest_words->words, suggest_words->words_nr);
-    }
+
+  if (candidates->pre) {
+    input_method_dispatch_keys(im, str);
   }
 
-  (void)e;
+  return RET_OK;
+}
+
+static ret_t candidates_on_button_click(void* ctx, event_t* e) {
+  char str[32];
+  widget_t* button = WIDGET(e->target);
+  input_method_t* im = input_method();
+  wstr_t* text = &(button->text);
+  wchar_t c = text->str[text->size - 1];
+  candidates_t* candidates = CANDIDATES(ctx);
+  return_value_if_fail(im != NULL && text->size > 0, RET_FAIL);
+  tk_utf8_from_utf16(text->str, str, sizeof(str) - 1);
+
+  if (!candidates->pre) {
+    if (input_method_commit_text(im, str) == RET_OK) {
+      suggest_words_t* suggest_words = im->suggest_words;
+      if (suggest_words && suggest_words_find(suggest_words, c) == RET_OK) {
+        input_method_dispatch_candidates(im, suggest_words->words, suggest_words->words_nr);
+      }
+    }
+  }
 
   return RET_OK;
 }
 
 static ret_t candidates_create_button(widget_t* widget) {
+  candidates_t* candidates = CANDIDATES(widget);
   widget_t* button = button_create(widget, 0, 0, 0, 0);
   return_value_if_fail(button != NULL, RET_BAD_PARAMS);
 
   widget_use_style(button, "candidates");
-  widget_on(button, EVT_CLICK, candidates_on_button_click, button);
+  if (candidates->pre) {
+    widget_on(button, EVT_FOCUS, candidates_on_button_focused, widget);
+  } else {
+    widget_on(button, EVT_CLICK, candidates_on_button_click, widget);
+  }
+
   widget_set_focusable(button, TRUE);
 
   return RET_OK;
@@ -171,6 +196,16 @@ static ret_t candidates_on_paint_self(widget_t* widget, canvas_t* c) {
 static ret_t candidates_on_event(widget_t* widget, event_t* e) {
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
+  
+  if(e->type == EVT_WINDOW_OPEN) {
+    if(candidates->pre) {
+      candidates->event_id = input_method_on(input_method(), EVT_IM_SHOW_PRE_CANDIDATES,
+                                         candidates_on_im_candidates_event, candidates);
+    } else {
+      candidates->event_id = input_method_on(input_method(), EVT_IM_SHOW_CANDIDATES,
+                                         candidates_on_im_candidates_event, candidates);
+    }
+  }
 
   return hscrollable_on_event(candidates->hscrollable, e);
 }
@@ -186,7 +221,10 @@ static ret_t candidates_get_prop(widget_t* widget, const char* name, value_t* v)
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
 
-  if (candidates->hscrollable != NULL) {
+  if (tk_str_eq(name, CANDIDATES_PROP_PRE)) {
+    value_set_bool(v, candidates->pre);
+    return RET_OK;
+  } else if (candidates->hscrollable != NULL) {
     return hscrollable_get_prop(candidates->hscrollable, name, v);
   } else {
     return RET_NOT_FOUND;
@@ -197,6 +235,9 @@ static ret_t candidates_set_prop(widget_t* widget, const char* name, const value
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
 
+  if (tk_str_eq(name, CANDIDATES_PROP_PRE)) {
+    return candidates_set_pre(widget, value_bool(v));
+  }
   if (candidates->hscrollable != NULL) {
     return hscrollable_set_prop(candidates->hscrollable, name, v);
   } else {
@@ -275,9 +316,20 @@ TK_DECL_VTABLE(candidates) = {.size = sizeof(candidates_t),
 
 static ret_t candidates_on_im_candidates_event(void* ctx, event_t* e) {
   widget_t* widget = WIDGET(ctx);
+  candidates_t* candidates = CANDIDATES(widget);
   im_candidates_event_t* evt = (im_candidates_event_t*)e;
 
-  return candidates_update_candidates(widget, evt->candidates, evt->candidates_nr);
+  if (candidates->pre) {
+    if (e->type == EVT_IM_SHOW_PRE_CANDIDATES) {
+      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr);
+    }
+  } else {
+    if (e->type == EVT_IM_SHOW_CANDIDATES) {
+      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr);
+    }
+  }
+
+  return RET_OK;
 }
 
 widget_t* candidates_create(widget_t* parent, xy_t x, xy_t y, wh_t w, wh_t h) {
@@ -287,8 +339,6 @@ widget_t* candidates_create(widget_t* parent, xy_t x, xy_t y, wh_t w, wh_t h) {
 
   candidates->hscrollable = hscrollable_create(widget);
   hscrollable_set_always_scrollable(candidates->hscrollable, TRUE);
-  candidates->event_id = input_method_on(input_method(), EVT_IM_SHOW_CANDIDATES,
-                                         candidates_on_im_candidates_event, candidates);
 
   ENSURE(candidates->hscrollable != NULL);
 
@@ -299,4 +349,13 @@ widget_t* candidates_cast(widget_t* widget) {
   return_value_if_fail(WIDGET_IS_INSTANCE_OF(widget, candidates), NULL);
 
   return widget;
+}
+
+ret_t candidates_set_pre(widget_t* widget, bool_t pre) {
+  candidates_t* candidates = CANDIDATES(widget);
+  return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
+
+  candidates->pre = pre;
+
+  return RET_OK;
 }

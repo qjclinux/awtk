@@ -28,9 +28,6 @@
 
 BEGIN_C_DECLS
 
-struct _input_method_t;
-typedef struct _input_method_t input_method_t;
-
 typedef ret_t (*input_method_request_t)(input_method_t* im, widget_t* widget);
 typedef ret_t (*input_method_destroy_t)(input_method_t* im);
 
@@ -351,12 +348,12 @@ ret_t input_method_commit_text(input_method_t* im, const char* text);
  * @method input_method_set_lang
  * 设置语言。
  *
- * > 有的输入法，同时支持输入多种语言。
- * > 比如T9，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
- *
+ * > 有时在同一种语言环境下，也需要输入多种文字，典型的情况是同时输入中文和英文。
+ * > 比如T9输入法，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
+ * 
  * @annotation ["scriptable"]
  * @param {input_method_t*} im 输入法对象。
- * @param {const char*} lang 语言。
+ * @param {const char*} lang 语言。格式为语言+国家/地区码。如：zh_cn和en_us等。
  *
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
@@ -383,6 +380,17 @@ ret_t input_method_commit_text_ex(input_method_t* im, bool_t replace, const char
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_method_dispatch_key(input_method_t* im, uint32_t key);
+
+/**
+ * @method input_method_dispatch_keys
+ * 提交按键。
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ * @param {uint32_t} key 键值。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_dispatch_keys(input_method_t* im, const char* keys);
 
 /**
  * @method input_method_dispatch_preedit
@@ -426,6 +434,21 @@ ret_t input_method_dispatch_preedit_abort(input_method_t* im);
 ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uint32_t nr);
 
 /**
+ * @method input_method_dispatch_pre_candidates
+ * 请求显示预候选字。
+ * 
+ * > 预候选字: 在有的输入法中，比如T9硬键盘输入时，按下12两个键时，预候选字会显示可用的拼音列表。
+ * > 从预候选字列表中选择拼音，再查询拼音对应的候选字列表。
+ * 
+ * @param {input_method_t*} im 输入法对象。
+ * @param {char*} strs 候选字列表。
+ * @param {uint32_t} nr 候选字个数。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr);
+
+/**
  * @method input_method_create
  * 创建输入法对象。在具体实现中实现。
  *
@@ -461,6 +484,7 @@ input_method_t* input_method(void);
  */
 ret_t input_method_set(input_method_t* im);
 
+/*public for internal use*/
 event_t* im_commit_event_init(im_commit_event_t* e, const char* text, bool_t replace);
 
 END_C_DECLS

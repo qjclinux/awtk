@@ -24,7 +24,7 @@
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
 
-#ifdef WITH_IME_PINYIN 
+#ifdef WITH_IME_PINYIN
 
 #include "pinyinime.h"
 
@@ -62,7 +62,7 @@ static ret_t input_engine_pinyin_add_candidate(input_engine_t* engine, wbuffer_t
   return wbuffer_write_string(wb, str);
 }
 
-static ret_t input_engine_pinyin_input(input_engine_t* engine, int c) {
+static ret_t input_engine_pinyin_search(input_engine_t* engine) {
   uint32_t i = 0;
   wbuffer_t wb;
   uint32_t nr = im_search(engine->keys.str, engine->keys.size);
@@ -79,18 +79,18 @@ static ret_t input_engine_pinyin_input(input_engine_t* engine, int c) {
     }
   }
 
-  (void)c;
-
   return RET_OK;
 }
 
-input_engine_t* input_engine_create(void) {
+input_engine_t* input_engine_create(input_engine_t* im) {
   input_engine_t* engine = TKMEM_ZALLOC(input_engine_t);
   return_value_if_fail(engine != NULL, NULL);
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_pinyin_reset_input;
-  engine->input = input_engine_pinyin_input;
+
+  engine->im = im;
+  engine->input = input_engine_pinyin_search;
 
   im_open_decoder_rom();
   im_set_max_lens(32, 16);
@@ -107,4 +107,4 @@ ret_t input_engine_destroy(input_engine_t* engine) {
   return RET_OK;
 }
 
-#endif/*WITH_IME_PINYIN*/
+#endif /*WITH_IME_PINYIN*/

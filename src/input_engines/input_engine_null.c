@@ -52,13 +52,14 @@ static ret_t input_engine_null_input(input_engine_t* engine, int c) {
   return RET_OK;
 }
 
-input_engine_t* input_engine_create(void) {
+input_engine_t* input_engine_create(input_method_t* im) {
   input_engine_t* engine = TKMEM_ZALLOC(input_engine_t);
   return_value_if_fail(engine != NULL, NULL);
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_null_reset_input;
   engine->input = input_engine_null_input;
+  engine->im = im;
 
   return engine;
 }
@@ -70,5 +71,4 @@ ret_t input_engine_destroy(input_engine_t* engine) {
 
   return RET_OK;
 }
-#endif/*WITH_IME_NULL*/
-
+#endif /*WITH_IME_NULL*/

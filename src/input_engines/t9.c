@@ -121,7 +121,7 @@ uint32_t t9_search(const t9_item_info_t* items, uint32_t items_nr, const char* k
         break;
       }
     }
-    
+
     for (i = 0; i < 5; i++) {
       for (k = found; k < items_nr; k++) {
         iter = items + k;

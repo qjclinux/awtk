@@ -23,14 +23,12 @@
 #define TK_INPUT_ENGINE_H
 
 #include "tkc/str.h"
+#include "base/types_def.h"
 
 BEGIN_C_DECLS
 
-struct _input_engine_t;
-typedef struct _input_engine_t input_engine_t;
-
+typedef ret_t (*input_engine_search_t)(input_engine_t* engine, const char* keys);
 typedef ret_t (*input_engine_reset_input_t)(input_engine_t* engine);
-typedef ret_t (*input_engine_input_t)(input_engine_t* engine, int key);
 typedef ret_t (*input_engine_set_lang_t)(input_engine_t* engine, const char* lang);
 
 #define TK_IM_MAX_INPUT_CHARS 15
@@ -75,19 +73,23 @@ struct _input_engine_t {
   uint32_t candidates_nr;
 
   /*具体实现需要实现的函数*/
-  input_engine_input_t input;
+  input_engine_search_t search;
   input_engine_set_lang_t set_lang;
   input_engine_reset_input_t reset_input;
+
+  /*private*/
+  input_method_t* im;
 };
 
 /**
  * @method input_engine_create
  * @annotation ["constructor"]
+ * @param {input_method_t*} im 输入法对象。
  * 创建输入法引擎对象。
  *
  * @return {input_engine_t*} 返回输入法引擎对象。
  */
-input_engine_t* input_engine_create(void);
+input_engine_t* input_engine_create(input_method_t* im);
 
 /**
  * @method input_engine_destroy
@@ -111,9 +113,11 @@ ret_t input_engine_reset_input(input_engine_t* engine);
 /**
  * @engine input_engine_set_lang
  * 设置语言。
+ * > 有时在同一种语言环境下，也需要输入多种文字，典型的情况是同时输入中文和英文。
+ * > 比如T9输入法，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
  * @annotation ["scriptable"]
  * @param {input_engine_t*} engine 输入法引擎对象。
- * @param {const char*} lang 语言。
+ * @param {const char*} lang 语言。格式为语言+国家/地区码。如：zh_cn和en_us等。
  *
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
@@ -128,6 +132,27 @@ ret_t input_engine_set_lang(input_engine_t* engine, const char* lang);
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_engine_input(input_engine_t* engine, int key);
+
+/**
+ * @method input_engine_search
+ * 根据按键组合，更新候选字，并通过输入法对象提交候选字和pre候选字。
+ * @param {input_engine_t*} engine 输入法引擎对象。
+ * @param {const char*} keys 按键组合。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_engine_search(input_engine_t* engine, const char* keys);
+
+/**
+ * @method input_engine_search_with_keys
+ * 更新按键组合，然后调用search进行查询。
+ * 
+ * @param {input_engine_t*} engine 输入法引擎对象。
+ * @param {const char*} keys 按键组合。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t input_engine_search_with_keys(input_engine_t* engine, const char* keys);
 
 END_C_DECLS
 

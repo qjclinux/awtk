@@ -1,5 +1,5 @@
 <keyboard theme="keyboard" x="0" y="bottom" w="100%" h="40%">
-  <pages x="0" y="bottom" w="100%" h="-28" active="2">
+  <pages x="0" y="bottom" w="100%" h="-58" active="2">
     <view name="number" x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=5,s=2,m=2)">
         <button repeat="300" name="1" text="1"/>
         <button repeat="300" name="2" text="2"/>
@@ -126,6 +126,7 @@
         <button name="page:number" style="highlight" text="123"/>
     </view>
   </pages>
-  <candidates x="0" y="0" w="100%" h="30"/>
+  <candidates pre="true" x="0" y="0" w="100%" h="30"/>
+  <candidates x="0" y="30" w="100%" h="30"/>
   <button name="close" style="close" self_layout="default(x=r:2, y=2, w=20, h=20)" text="x" />
 </keyboard>

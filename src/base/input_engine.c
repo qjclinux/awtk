@@ -47,6 +47,18 @@ ret_t input_engine_set_lang(input_engine_t* engine, const char* lang) {
   return ret;
 }
 
+ret_t input_engine_search(input_engine_t* engine, const char* keys) {
+  return_value_if_fail(engine != NULL && engine->search != NULL && keys != NULL, RET_BAD_PARAMS);
+
+  return engine->search(engine, keys);
+}
+
+ret_t input_engine_search_with_keys(input_engine_t* engine, const char* keys) {
+  return_value_if_fail(engine != NULL && keys != NULL, RET_BAD_PARAMS);
+
+  return input_engine_search(engine, keys);
+}
+
 ret_t input_engine_input(input_engine_t* engine, int key) {
   ret_t ret = RET_OK;
   return_value_if_fail(engine != NULL, RET_BAD_PARAMS);
@@ -66,8 +78,8 @@ ret_t input_engine_input(input_engine_t* engine, int key) {
     str_append_char(&(engine->keys), (char)key);
   }
 
-  if (engine->input) {
-    ret = engine->input(engine, key);
+  if (engine->search) {
+    ret = engine->search(engine, engine->keys.str);
   }
 
   return ret;

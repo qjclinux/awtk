@@ -1,5 +1,5 @@
 ﻿/**
- * File:   input_engine_t9.c
+ * File:   input_engine_t9ext.c
  * Author: AWTK Develop Team
  * Brief:  t9 input method engine
  *
@@ -22,21 +22,25 @@
 #include "tkc/utf8.h"
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
+#include "base/input_method.h"
 
-#ifdef WITH_IME_T9
+#ifdef WITH_IME_T9EXT
 
 #include "t9.h"
-#include "t9_zh_cn.inc"
-#include "t9_en_us.inc"
+#include "t9ext_zh_cn.inc"
+#include "pinyin_table.inc"
 
-typedef struct _input_engine_t9_t {
+typedef struct _input_engine_t9ext_t {
   input_engine_t input_engine;
 
   uint32_t items_nr;
   const t9_item_info_t* items;
-} input_engine_t9_t;
 
-static ret_t input_engine_t9_reset_input(input_engine_t* engine) {
+  char pre_candidates[128];
+  uint32_t pre_candidates_nr;
+} input_engine_t9ext_t;
+
+static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
@@ -44,7 +48,7 @@ static const char* num_chars[] = {
     "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "",
 };
 
-static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
+static ret_t input_engine_t9ext_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
   char str[2];
   uint32_t n = 0;
   const char* p = NULL;
@@ -66,59 +70,51 @@ static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t*
   return n;
 }
 
-static ret_t input_engine_t9_search(input_engine_t* engine) {
+static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
-  str_t* keys = &(engine->keys);
-  input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
+  uint32_t keys_size = strlen(keys);
+  input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
 
-  wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-  if (keys->size == 1) {
-    engine->candidates_nr = input_engine_t9_add_chars(engine, keys->str[0], &wb);
-  } else {
-    engine->candidates_nr = 0;
+  if(keys_size < 1) {
+    return RET_OK;
   }
-  engine->candidates_nr += t9_search(t9->items, t9->items_nr, keys->str, &wb);
 
-  log_debug("key=%s %d\n", keys->str, engine->candidates_nr);
-  if (engine->candidates_nr == 0) {
-    input_engine_reset_input(engine);
+  if (isdigit(keys[0])) {
+    wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
+    if(keys_size == 1) {
+      t9->pre_candidates_nr = input_engine_t9ext_add_chars(engine, keys[0], &wb); 
+    }
+
+    t9->pre_candidates_nr += t9_search(t9->items, t9->items_nr, keys, &wb);
+    input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
+  } else {
   }
 
   return RET_OK;
 }
 
-static ret_t input_engine_t9_set_lang(input_engine_t* engine, const char* lang) {
-  input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
+static ret_t input_engine_t9ext_set_lang(input_engine_t* engine, const char* lang) {
+  input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
   return_value_if_fail(engine != NULL, RET_BAD_PARAMS);
 
-  log_debug("input_engine_t9_set_lang: %s\n", lang);
-  if (tk_str_ieq(lang, "zh_cn")) {
-    t9->items = s_zh_cn_items;
-    t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
-  } else if (tk_str_ieq(lang, "en_us")) {
-    t9->items = s_en_us_items;
-    t9->items_nr = ARRAY_SIZE(s_en_us_items);
-  } else {
-    log_debug("not support lang:%s\n", lang);
-  }
 
   return RET_OK;
 }
 
 input_engine_t* input_engine_create(input_method_t* im) {
-  input_engine_t9_t* t9 = TKMEM_ZALLOC(input_engine_t9_t);
+  input_engine_t9ext_t* t9 = TKMEM_ZALLOC(input_engine_t9ext_t);
   input_engine_t* engine = (input_engine_t*)t9;
 
   return_value_if_fail(engine != NULL, NULL);
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
-  engine->reset_input = input_engine_t9_reset_input;
-  engine->search = input_engine_t9_search;
-  engine->set_lang = input_engine_t9_set_lang;
+  engine->reset_input = input_engine_t9ext_reset_input;
+  engine->search = input_engine_t9ext_search;
+  engine->set_lang = input_engine_t9ext_set_lang;
   engine->im = im;
 
-  t9->items = s_en_us_items;
-  t9->items_nr = ARRAY_SIZE(s_en_us_items);
+  t9->items = s_pinyin_items;
+  t9->items_nr = ARRAY_SIZE(s_pinyin_items);
 
   return engine;
 }
@@ -131,4 +127,4 @@ ret_t input_engine_destroy(input_engine_t* engine) {
   return RET_OK;
 }
 
-#endif /*WITH_IME_T9*/
+#endif /*WITH_IME_T9EXT*/

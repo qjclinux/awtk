@@ -139,9 +139,6 @@ ret_t input_method_dispatch_key(input_method_t* im, uint32_t key) {
 
   if (im->engine != NULL) {
     if (input_engine_input(im->engine, (char)key) == RET_OK) {
-      input_method_dispatch_candidates(im, (const char*)(im->engine->candidates),
-                                       im->engine->candidates_nr);
-
       return RET_OK;
     } else {
       if (key != TK_KEY_BACKSPACE && key != TK_KEY_DELETE) {
@@ -151,6 +148,16 @@ ret_t input_method_dispatch_key(input_method_t* im, uint32_t key) {
   }
 
   return input_method_dispatch_key_only(im, key);
+}
+
+ret_t input_method_dispatch_keys(input_method_t* im, const char* keys) {
+  return_value_if_fail(im != NULL && keys != NULL, RET_BAD_PARAMS);
+
+  if (im->engine != NULL) {
+    return input_engine_search_with_keys(im->engine, keys);
+  }
+
+  return RET_OK;
 }
 
 ret_t input_method_set_lang(input_method_t* im, const char* lang) {
@@ -166,6 +173,16 @@ ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uin
   im_candidates_event_t ce;
 
   ce.e = event_init(EVT_IM_SHOW_CANDIDATES, im);
+  ce.candidates_nr = nr;
+  ce.candidates = strs;
+
+  return input_method_dispatch(im, (event_t*)(&ce));
+}
+
+ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr) {
+  im_candidates_event_t ce;
+
+  ce.e = event_init(EVT_IM_SHOW_PRE_CANDIDATES, im);
   ce.candidates_nr = nr;
   ce.candidates = strs;
 

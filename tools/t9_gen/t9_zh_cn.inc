@@ -171206,7 +171206,7 @@ static const char* s_57835763313153[] = {
   "欧洲市场",
   NULL
 };
-static const t9_item_info_t s_zh_cn_items[] = {
+static const t9_item_info_t s_t9_numbers_pinyin[] = {
   {"1", "a", s_1},
   {"11", "ba", s_11},
   {"111", "aaa", s_111},

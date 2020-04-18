@@ -313,6 +313,12 @@ typedef enum _event_type_t {
    * 输入法请求显示候选字事件(im_candidates_event_t)。
    */
   EVT_IM_SHOW_CANDIDATES,
+
+  /**
+   * @const EVT_IM_SHOW_PRE_CANDIDATES
+   * 输入法请求显示预候选字事件(im_candidates_event_t)。
+   */
+  EVT_IM_SHOW_PRE_CANDIDATES,
   /**
    * @const EVT_IM_ACTION
    * 软键盘Action点击事件(event_t)。
