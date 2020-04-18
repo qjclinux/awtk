@@ -225,6 +225,9 @@ static ret_t candidates_get_prop(widget_t* widget, const char* name, value_t* v)
   if (tk_str_eq(name, CANDIDATES_PROP_PRE)) {
     value_set_bool(v, candidates->pre);
     return RET_OK;
+  } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
+    value_set_bool(v, candidates->select_by_num);
+    return RET_OK;
   } else if (candidates->hscrollable != NULL) {
     return hscrollable_get_prop(candidates->hscrollable, name, v);
   } else {
@@ -238,6 +241,8 @@ static ret_t candidates_set_prop(widget_t* widget, const char* name, const value
 
   if (tk_str_eq(name, CANDIDATES_PROP_PRE)) {
     return candidates_set_pre(widget, value_bool(v));
+  } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
+    return candidates_set_select_by_num(widget, value_bool(v));
   }
   if (candidates->hscrollable != NULL) {
     return hscrollable_set_prop(candidates->hscrollable, name, v);
@@ -279,14 +284,14 @@ static ret_t candidates_on_keydown(widget_t* widget, key_event_t* e) {
   return_value_if_fail(widget != NULL, RET_BAD_PARAMS);
 
   if (nr > 1) {
-    if (e->key >= TK_KEY_0 && e->key <= TK_KEY_9) {
-      int32_t i = e->key - (int32_t)TK_KEY_0;
+    if (e->key >= TK_KEY_1 && e->key <= TK_KEY_9 && candidates->select_by_num) {
+      int32_t i = e->key - (int32_t)TK_KEY_0 - 1;
 
       if (i >= 0 && i < nr) {
         event_t click = event_init(EVT_CLICK, NULL);
         child = widget_get_child(widget, i);
 
-        if (child->text.size > 0) {
+        if (child->text.size > 0 && child->visible) {
           widget_dispatch(child, &click);
           ret = RET_STOP;
         }
@@ -338,6 +343,7 @@ widget_t* candidates_create(widget_t* parent, xy_t x, xy_t y, wh_t w, wh_t h) {
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(candidates != NULL, NULL);
 
+  candidates->select_by_num = TRUE;
   candidates->hscrollable = hscrollable_create(widget);
   hscrollable_set_always_scrollable(candidates->hscrollable, TRUE);
 
@@ -357,6 +363,15 @@ ret_t candidates_set_pre(widget_t* widget, bool_t pre) {
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
 
   candidates->pre = pre;
+
+  return RET_OK;
+}
+
+ret_t candidates_set_select_by_num(widget_t* widget, bool_t select_by_num) {
+  candidates_t* candidates = CANDIDATES(widget);
+  return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
+
+  candidates->select_by_num = select_by_num;
 
   return RET_OK;
 }

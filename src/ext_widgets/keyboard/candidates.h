@@ -68,6 +68,14 @@ typedef struct _candidates_t {
    * > 从预候选字列表中选择拼音，再查询拼音对应的候选字列表。
    */
   bool_t pre;
+  
+  /**
+   * @property {bool_t} select_by_num
+   * @annotation ["set_prop","get_prop","readable","persitent","design","scriptable"]
+   * 是否启用用数字选择候选字。比如按下1选择第1个候选字，按下2选择第2个候选字。
+   * 
+   */
+  bool_t select_by_num;
 
   /*private*/
   bool_t expanded;
@@ -116,7 +124,20 @@ widget_t* candidates_cast(widget_t* widget);
  */
 ret_t candidates_set_pre(widget_t* widget, bool_t pre);
 
+/**
+ * @method candidates_set_select_by_num
+ * 设置是否启用用数字选择候选字。
+ * 
+ * @annotation ["scriptable"]
+ * @param {widget_t*} widget 控件对象。
+ * @param {bool_t}  select_by_num 是否启用用数字选择候选字。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t candidates_set_select_by_num(widget_t* widget, bool_t select_by_num);
+
 #define CANDIDATES_PROP_PRE "pre"
+#define CANDIDATES_PROP_SELECT_BY_NUM "select_by_num"
 
 #define CANDIDATES(widget) ((candidates_t*)(candidates_cast(WIDGET(widget))))
 
