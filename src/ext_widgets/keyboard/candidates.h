@@ -77,6 +77,13 @@ typedef struct _candidates_t {
    */
   bool_t select_by_num;
 
+  /**
+   * @property {char*} button_style
+   * @annotation ["set_prop","get_prop","readable","persitent","design","scriptable"]
+   * 按钮的style名称。
+   */
+  char* button_style;
+
   /*private*/
   bool_t expanded;
   wh_t normal_h;
@@ -136,7 +143,20 @@ ret_t candidates_set_pre(widget_t* widget, bool_t pre);
  */
 ret_t candidates_set_select_by_num(widget_t* widget, bool_t select_by_num);
 
+/**
+ * @method candidates_set_button_style
+ * 设置按钮的style名称。
+ * 
+ * @annotation ["scriptable"]
+ * @param {widget_t*} widget 控件对象。
+ * @param {const char*}  button_style 按钮的style名称。
+ *
+ * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
+ */
+ret_t candidates_set_button_style(widget_t* widget, const char* button_style);
+
 #define CANDIDATES_PROP_PRE "pre"
+#define CANDIDATES_PROP_BUTTON_STYLE "button_style"
 #define CANDIDATES_PROP_SELECT_BY_NUM "select_by_num"
 
 #define CANDIDATES(widget) ((candidates_t*)(candidates_cast(WIDGET(widget))))

@@ -80,6 +80,10 @@ static ret_t candidates_create_button(widget_t* widget) {
     widget_on(button, EVT_CLICK, candidates_on_button_click, widget);
   }
 
+  if (candidates->button_style != NULL) {
+    widget_use_style(button, candidates->button_style);
+  }
+
   widget_set_focusable(button, TRUE);
 
   return RET_OK;
@@ -180,6 +184,7 @@ static ret_t candidates_on_destroy_default(widget_t* widget) {
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(widget != NULL && candidates != NULL, RET_BAD_PARAMS);
 
+  TKMEM_FREE(candidates->button_style);
   hscrollable_destroy(candidates->hscrollable);
   input_method_off(input_method(), candidates->event_id);
 
@@ -228,6 +233,9 @@ static ret_t candidates_get_prop(widget_t* widget, const char* name, value_t* v)
   } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
     value_set_bool(v, candidates->select_by_num);
     return RET_OK;
+  } else if (tk_str_eq(name, CANDIDATES_PROP_BUTTON_STYLE)) {
+    value_set_str(v, candidates->button_style);
+    return RET_OK;
   } else if (candidates->hscrollable != NULL) {
     return hscrollable_get_prop(candidates->hscrollable, name, v);
   } else {
@@ -243,6 +251,8 @@ static ret_t candidates_set_prop(widget_t* widget, const char* name, const value
     return candidates_set_pre(widget, value_bool(v));
   } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
     return candidates_set_select_by_num(widget, value_bool(v));
+  } else if (tk_str_eq(name, CANDIDATES_PROP_BUTTON_STYLE)) {
+    return candidates_set_button_style(widget, value_str(v));
   }
   if (candidates->hscrollable != NULL) {
     return hscrollable_set_prop(candidates->hscrollable, name, v);
@@ -372,6 +382,15 @@ ret_t candidates_set_select_by_num(widget_t* widget, bool_t select_by_num) {
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
 
   candidates->select_by_num = select_by_num;
+
+  return RET_OK;
+}
+
+ret_t candidates_set_button_style(widget_t* widget, const char* button_style) {
+  candidates_t* candidates = CANDIDATES(widget);
+  return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
+
+  candidates->button_style = tk_str_copy(candidates->button_style, button_style);
 
   return RET_OK;
 }
