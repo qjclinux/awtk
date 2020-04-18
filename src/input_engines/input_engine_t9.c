@@ -66,22 +66,24 @@ static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t*
   return n;
 }
 
-static ret_t input_engine_t9_search(input_engine_t* engine) {
+static ret_t input_engine_t9_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
-  str_t* keys = &(engine->keys);
+  uint32_t keys_size = strlen(keys);
   input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
 
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-  if (keys->size == 1) {
-    engine->candidates_nr = input_engine_t9_add_chars(engine, keys->str[0], &wb);
+  if (keys_size == 1) {
+    engine->candidates_nr = input_engine_t9_add_chars(engine, keys[0], &wb);
   } else {
     engine->candidates_nr = 0;
   }
-  engine->candidates_nr += t9_search(t9->items, t9->items_nr, keys->str, &wb);
+  engine->candidates_nr += t9_search(t9->items, t9->items_nr, keys, &wb, FALSE);
 
-  log_debug("key=%s %d\n", keys->str, engine->candidates_nr);
+  log_debug("key=%s %d\n", keys, engine->candidates_nr);
   if (engine->candidates_nr == 0) {
     input_engine_reset_input(engine);
+  } else {
+    input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
   }
 
   return RET_OK;
@@ -93,8 +95,8 @@ static ret_t input_engine_t9_set_lang(input_engine_t* engine, const char* lang) 
 
   log_debug("input_engine_t9_set_lang: %s\n", lang);
   if (tk_str_ieq(lang, "zh_cn")) {
-    t9->items = s_zh_cn_items;
-    t9->items_nr = ARRAY_SIZE(s_zh_cn_items);
+    t9->items = s_t9_numbers_pinyin;
+    t9->items_nr = ARRAY_SIZE(s_t9_numbers_pinyin);
   } else if (tk_str_ieq(lang, "en_us")) {
     t9->items = s_en_us_items;
     t9->items_nr = ARRAY_SIZE(s_en_us_items);
