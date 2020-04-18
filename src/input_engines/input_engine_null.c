@@ -31,7 +31,7 @@ static ret_t input_engine_null_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
-static ret_t input_engine_null_input(input_engine_t* engine, int c) {
+static ret_t input_engine_null_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
 
@@ -44,7 +44,7 @@ static ret_t input_engine_null_input(input_engine_t* engine, int c) {
     wbuffer_write_string(&wb, "远");
     wbuffer_write_string(&wb, "电子");
     wbuffer_write_string(&wb, "有限公司");
-    engine->candidates_nr = 8;
+    engine->candidates_nr = 7;
   } else {
     engine->candidates_nr = 0;
   }
@@ -58,7 +58,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_null_reset_input;
-  engine->input = input_engine_null_input;
+  engine->input = input_engine_null_search;
   engine->im = im;
 
   return engine;

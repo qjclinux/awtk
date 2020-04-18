@@ -23,6 +23,7 @@
 #include "tkc/utf8.h"
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
+#include "base/input_method.h"
 
 #ifdef WITH_IME_PINYIN
 
@@ -62,13 +63,21 @@ static ret_t input_engine_pinyin_add_candidate(input_engine_t* engine, wbuffer_t
   return wbuffer_write_string(wb, str);
 }
 
-static ret_t input_engine_pinyin_search(input_engine_t* engine) {
-  uint32_t i = 0;
+static ret_t input_engine_pinyin_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
-  uint32_t nr = im_search(engine->keys.str, engine->keys.size);
+  uint32_t i = 0;
+  uint32_t keys_size = strlen(keys);
+  uint32_t nr = im_search(keys, keys_size);
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
 
-  wbuffer_write_string(&wb, engine->keys.str);
+  if(keys_size == 0) {
+    input_engine_reset_input(engine);
+    input_method_dispatch_candidates(engine->im, engine->candidates, 0);
+
+    return RET_OK;
+  }
+
+  wbuffer_write_string(&wb, keys);
   engine->candidates_nr = 1;
 
   for (i = 0; i < nr; i++) {
@@ -79,10 +88,12 @@ static ret_t input_engine_pinyin_search(input_engine_t* engine) {
     }
   }
 
+  input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
+
   return RET_OK;
 }
 
-input_engine_t* input_engine_create(input_engine_t* im) {
+input_engine_t* input_engine_create(input_method_t* im) {
   input_engine_t* engine = TKMEM_ZALLOC(input_engine_t);
   return_value_if_fail(engine != NULL, NULL);
 
@@ -90,7 +101,7 @@ input_engine_t* input_engine_create(input_engine_t* im) {
   engine->reset_input = input_engine_pinyin_reset_input;
 
   engine->im = im;
-  engine->input = input_engine_pinyin_search;
+  engine->search = input_engine_pinyin_search;
 
   im_open_decoder_rom();
   im_set_max_lens(32, 16);
