@@ -22,6 +22,7 @@
 #include "tkc/mem.h"
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
+#include "base/input_method.h"
 
 #ifdef WITH_IME_NULL
 
@@ -33,11 +34,11 @@ static ret_t input_engine_null_reset_input(input_engine_t* engine) {
 
 static ret_t input_engine_null_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
+  uint32_t keys_size = strlen(keys);
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
 
-  (void)c;
-  if (engine->keys.size > 0) {
-    wbuffer_write_string(&wb, engine->keys.str);
+  if (keys_size > 0) {
+    wbuffer_write_string(&wb, keys);
     wbuffer_write_string(&wb, "广");
     wbuffer_write_string(&wb, "州");
     wbuffer_write_string(&wb, "致");
@@ -45,6 +46,7 @@ static ret_t input_engine_null_search(input_engine_t* engine, const char* keys) 
     wbuffer_write_string(&wb, "电子");
     wbuffer_write_string(&wb, "有限公司");
     engine->candidates_nr = 7;
+    input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
   } else {
     engine->candidates_nr = 0;
   }
@@ -58,7 +60,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
 
   str_init(&(engine->keys), TK_IM_MAX_INPUT_CHARS + 1);
   engine->reset_input = input_engine_null_reset_input;
-  engine->input = input_engine_null_search;
+  engine->search = input_engine_null_search;
   engine->im = im;
 
   return engine;
