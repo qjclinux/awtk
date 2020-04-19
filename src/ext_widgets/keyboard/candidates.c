@@ -185,6 +185,13 @@ static ret_t candidates_update_candidates(widget_t* widget, const char* strs, ui
   }
 
   candidates->candidates_nr = nr;
+
+  if (candidates->auto_hide) {
+    widget_set_visible(widget, nr > 0, FALSE);
+  } else {
+    widget_set_visible(widget, TRUE, FALSE);
+  }
+
   candidates_relayout_children(widget);
   widget_invalidate_force(widget, NULL);
 
@@ -244,6 +251,9 @@ static ret_t candidates_get_prop(widget_t* widget, const char* name, value_t* v)
   } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
     value_set_bool(v, candidates->select_by_num);
     return RET_OK;
+  } else if (tk_str_eq(name, CANDIDATES_PROP_AUTO_HIDE)) {
+    value_set_bool(v, candidates->auto_hide);
+    return RET_OK;
   } else if (tk_str_eq(name, CANDIDATES_PROP_BUTTON_STYLE)) {
     value_set_str(v, candidates->button_style);
     return RET_OK;
@@ -262,6 +272,8 @@ static ret_t candidates_set_prop(widget_t* widget, const char* name, const value
     return candidates_set_pre(widget, value_bool(v));
   } else if (tk_str_eq(name, CANDIDATES_PROP_SELECT_BY_NUM)) {
     return candidates_set_select_by_num(widget, value_bool(v));
+  } else if (tk_str_eq(name, CANDIDATES_PROP_AUTO_HIDE)) {
+    return candidates_set_auto_hide(widget, value_bool(v));
   } else if (tk_str_eq(name, CANDIDATES_PROP_BUTTON_STYLE)) {
     return candidates_set_button_style(widget, value_str(v));
   }
@@ -328,10 +340,18 @@ static ret_t candidates_on_keydown(widget_t* widget, key_event_t* e) {
   return ret;
 }
 
+static const char* const s_candidates_properties[] = {CANDIDATES_PROP_PRE, 
+  CANDIDATES_PROP_SELECT_BY_NUM,
+  CANDIDATES_PROP_BUTTON_STYLE,
+  CANDIDATES_PROP_AUTO_HIDE,
+  NULL};
+
 TK_DECL_VTABLE(candidates) = {.size = sizeof(candidates_t),
                               .scrollable = TRUE,
                               .type = WIDGET_TYPE_CANDIDATES,
                               .parent = TK_PARENT_VTABLE(widget),
+                              .clone_properties = s_candidates_properties,
+                              .persistent_properties = s_candidates_properties,
                               .create = candidates_create,
                               .on_event = candidates_on_event,
                               .on_paint_self = candidates_on_paint_self,
@@ -393,6 +413,15 @@ ret_t candidates_set_select_by_num(widget_t* widget, bool_t select_by_num) {
   return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
 
   candidates->select_by_num = select_by_num;
+
+  return RET_OK;
+}
+
+ret_t candidates_set_auto_hide(widget_t* widget, bool_t auto_hide) {
+  candidates_t* candidates = CANDIDATES(widget);
+  return_value_if_fail(candidates != NULL, RET_BAD_PARAMS);
+
+  candidates->auto_hide = auto_hide;
 
   return RET_OK;
 }

@@ -37,6 +37,9 @@
   <style name="default">
     <normal bg_color="#cfd4da"/>
   </style>
+  <style name="transparent">
+    <normal />
+  </style>
 </keyboard>
 
 <column>
