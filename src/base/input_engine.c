@@ -76,7 +76,13 @@ ret_t input_engine_input(input_engine_t* engine, int key) {
       return RET_BAD_PARAMS;
     }
 
-    if(isprint(key)) {
+    if (engine->input != NULL) {
+      if (engine->input(engine, key) == RET_OK) {
+        str_append_char(&(engine->keys), (char)key);
+      } else {
+        return RET_FAIL;
+      }
+    } else {
       str_append_char(&(engine->keys), (char)key);
     }
   }

@@ -29,6 +29,7 @@ BEGIN_C_DECLS
 
 typedef ret_t (*input_engine_search_t)(input_engine_t* engine, const char* keys);
 typedef ret_t (*input_engine_reset_input_t)(input_engine_t* engine);
+typedef ret_t (*input_engine_input_t)(input_engine_t* engine, int key);
 typedef ret_t (*input_engine_set_lang_t)(input_engine_t* engine, const char* lang);
 
 #define TK_IM_MAX_INPUT_CHARS 15
@@ -73,6 +74,7 @@ struct _input_engine_t {
   uint32_t candidates_nr;
 
   /*具体实现需要实现的函数*/
+  input_engine_input_t input;
   input_engine_search_t search;
   input_engine_set_lang_t set_lang;
   input_engine_reset_input_t reset_input;

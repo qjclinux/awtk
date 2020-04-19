@@ -38,21 +38,20 @@ typedef struct _input_engine_t9ext_t {
 } input_engine_t9ext_t;
 
 static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
-  if((key >= TK_KEY_0 && key <= TK_KEY_9) || key == TK_KEY_ASTERISK || key == TK_KEY_HASH) {
+  if ((key >= TK_KEY_0 && key <= TK_KEY_9) || key == TK_KEY_ASTERISK || key == TK_KEY_HASH) {
     return RET_OK;
-  } else if(key == TK_KEY_SPACE) {
+  } else if (key == TK_KEY_SPACE) {
     input_method_commit_text(engine->im, " ");
   }
 
   return RET_FAIL;
-
 }
 
 static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
 
+  log_debug("input_engine_t9ext_reset_input\n");
   input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, 0);
-  input_method_dispatch_candidates(engine->im, engine->candidates, 0);
 
   return RET_OK;
 }
@@ -102,7 +101,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
     first = (const char*)(wb.data);
 
-    if(keys_size == 1) {
+    if (keys_size == 1) {
       t9->pre_candidates_nr = 1;
       wbuffer_write_string(&wb, keys);
     } else {
@@ -114,11 +113,11 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
       input_engine_reset_input(engine);
     } else {
       input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
-      
+
       wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-      if(keys_size == 1) {
+      if (keys_size == 1) {
         engine->candidates_nr = input_engine_t9ext_add_chars(engine, keys[0], &wb);
-      } else if(*first) {
+      } else if (*first) {
         const table_entry_t* items = s_pinyin_chinese_items;
         uint32_t items_nr = ARRAY_SIZE(s_pinyin_chinese_items);
         engine->candidates_nr = table_search(items, items_nr, first, &wb, TRUE);

@@ -36,7 +36,7 @@ typedef struct _table_entry_t {
 } table_entry_t;
 
 uint32_t table_search(const table_entry_t* items, uint32_t items_nr, const char* keys,
-                   wbuffer_t* result, bool_t exact);
+                      wbuffer_t* result, bool_t exact);
 
 END_C_DECLS
 

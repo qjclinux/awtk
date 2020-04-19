@@ -62,7 +62,7 @@ static ret_t input_engine_spinyin_set_lang(input_engine_t* engine, const char* l
 }
 
 input_engine_t* input_engine_create(input_method_t* im) {
-  input_engine_t* engine  = TKMEM_ZALLOC(input_engine_t);
+  input_engine_t* engine = TKMEM_ZALLOC(input_engine_t);
 
   return_value_if_fail(engine != NULL, NULL);
 

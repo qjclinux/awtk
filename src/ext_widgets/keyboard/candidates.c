@@ -51,22 +51,23 @@ static ret_t candidates_on_button_click(void* ctx, event_t* e) {
   widget_t* button = WIDGET(e->target);
   input_method_t* im = input_method();
   wstr_t* text = &(button->text);
-  wchar_t c = text->str[text->size - 1];
-  candidates_t* candidates = CANDIDATES(ctx);
-  return_value_if_fail(im != NULL && text->size > 0, RET_FAIL);
-  tk_utf8_from_utf16(text->str, str, sizeof(str) - 1);
+  return_value_if_fail(im != NULL, RET_FAIL);
 
-  if (!candidates->pre) {
+  if (text->size > 0) {
+    wchar_t c = text->str[text->size - 1];
+
+    tk_utf8_from_utf16(text->str, str, sizeof(str) - 1);
     if (input_method_commit_text(im, str) == RET_OK) {
       suggest_words_t* suggest_words = im->suggest_words;
       if (suggest_words && suggest_words_find(suggest_words, c) == RET_OK) {
         input_method_dispatch_candidates(im, suggest_words->words, suggest_words->words_nr);
+        if (suggest_words->words_nr > 0) {
+          widget_set_focused(widget_get_child(button->parent, 0), TRUE);
+        }
+        log_debug("suggest_words->words:%s\n", suggest_words->words);
       }
     }
   }
-
-  button->parent->target = NULL;
-  button->parent->key_target = NULL;
 
   return RET_OK;
 }
@@ -166,8 +167,9 @@ static ret_t candidates_update_candidates(widget_t* widget, const char* strs, ui
 
   for (i = 0; i < nr; i++) {
     iter = children[i];
+    widget_set_visible(iter, TRUE, FALSE);
     widget_set_text_utf8(iter, text);
-    if(candidates->pre) {
+    if (candidates->pre) {
       widget_set_focused(iter, i == 0);
     } else {
       widget_set_state(widget, WIDGET_STATE_NORMAL);
@@ -178,6 +180,7 @@ static ret_t candidates_update_candidates(widget_t* widget, const char* strs, ui
 
   for (; i < widget->children->size; i++) {
     iter = children[i];
+    widget_set_visible(iter, FALSE, FALSE);
     widget_set_text_utf8(iter, "");
   }
 

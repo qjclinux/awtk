@@ -23,7 +23,7 @@
 #include "ime_utils.h"
 
 int32_t table_search_index(const table_entry_t* items, uint32_t items_nr, const char* key,
-                        uint32_t key_len, bool_t exact) {
+                           uint32_t key_len, bool_t exact) {
   int r = 0;
   int32_t low = 0;
   int32_t high = items_nr - 1;
@@ -74,7 +74,7 @@ static uint32_t count_words(const char** words) {
 }
 
 uint32_t table_search(const table_entry_t* items, uint32_t items_nr, const char* key,
-                   wbuffer_t* result, bool_t exact) {
+                      wbuffer_t* result, bool_t exact) {
   uint32_t i = 0;
   uint32_t nr = 0;
   int32_t found = 0;
