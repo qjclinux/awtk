@@ -31,6 +31,7 @@ typedef ret_t (*input_engine_search_t)(input_engine_t* engine, const char* keys)
 typedef ret_t (*input_engine_reset_input_t)(input_engine_t* engine);
 typedef ret_t (*input_engine_input_t)(input_engine_t* engine, int key);
 typedef ret_t (*input_engine_set_lang_t)(input_engine_t* engine, const char* lang);
+typedef const char* (*input_engine_get_lang_t)(input_engine_t* engine);
 
 #define TK_IM_MAX_INPUT_CHARS 15
 #define TK_IM_MAX_CANDIDATE_CHARS 255
@@ -77,10 +78,12 @@ struct _input_engine_t {
   input_engine_input_t input;
   input_engine_search_t search;
   input_engine_set_lang_t set_lang;
+  input_engine_get_lang_t get_lang;
   input_engine_reset_input_t reset_input;
 
   /*private*/
   input_method_t* im;
+  char lang[TK_NAME_LEN+1];
 };
 
 /**
@@ -117,6 +120,9 @@ ret_t input_engine_reset_input(input_engine_t* engine);
  * 设置语言。
  * > 有时在同一种语言环境下，也需要输入多种文字，典型的情况是同时输入中文和英文。
  * > 比如T9输入法，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
+ * > 数字、小写字母、大写字母和符合也可以视为输入的语言。
+ * > 主要用于提示输入法引擎选择适当的输入方法。
+ * 
  * @annotation ["scriptable"]
  * @param {input_engine_t*} engine 输入法引擎对象。
  * @param {const char*} lang 语言。格式为语言+国家/地区码。如：zh_cn和en_us等。
@@ -124,6 +130,16 @@ ret_t input_engine_reset_input(input_engine_t* engine);
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_engine_set_lang(input_engine_t* engine, const char* lang);
+
+/**
+ * @engine input_engine_get_lang
+ * 获取语言。
+ * @annotation ["scriptable"]
+ * @param {input_engine_t*} engine 输入法引擎对象。
+ *
+ * @return {const char*} 返回语言。
+ */
+const char* input_engine_get_lang(input_engine_t* engine);
 
 /**
  * @method input_engine_input

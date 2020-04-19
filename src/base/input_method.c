@@ -169,6 +169,16 @@ ret_t input_method_set_lang(input_method_t* im, const char* lang) {
   return RET_FAIL;
 }
 
+const char* input_method_get_lang(input_method_t* im) {
+  return_value_if_fail(im != NULL, NULL);
+
+  if (im->engine != NULL) {
+    return input_engine_get_lang(im->engine);
+  }
+
+  return NULL;
+}
+
 ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uint32_t nr) {
   im_candidates_event_t ce;
 

@@ -292,6 +292,24 @@ static ret_t input_engine_t9ext_set_lang(input_engine_t* engine, const char* lan
   return RET_OK;
 }
 
+static const char* input_engine_t9ext_get_lang(input_engine_t* engine) {
+  input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
+  switch (t9->mode) {
+    case INPUT_MODE_DIGIT: {
+      return IM_LANG_DIGIT;
+    }
+    case INPUT_MODE_LOWER: {
+      return IM_LANG_LOWER;
+    }
+    case INPUT_MODE_UPPER: {
+      return IM_LANG_UPPER;
+    }
+    default: { 
+      return IM_LANG_ZH_CN;
+    }
+  }
+}
+
 input_engine_t* input_engine_create(input_method_t* im) {
   input_engine_t9ext_t* t9 = TKMEM_ZALLOC(input_engine_t9ext_t);
   input_engine_t* engine = (input_engine_t*)t9;
@@ -305,6 +323,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
   engine->input = input_engine_t9ext_input;
   engine->search = input_engine_t9ext_search;
   engine->set_lang = input_engine_t9ext_set_lang;
+  engine->get_lang = input_engine_t9ext_get_lang;
   engine->reset_input = input_engine_t9ext_reset_input;
 
   return engine;

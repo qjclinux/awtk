@@ -34,7 +34,14 @@ typedef struct _input_engine_t9_t {
 
   uint32_t items_nr;
   const table_entry_t* items;
+  char lang[TK_NAME_LEN + 1];
 } input_engine_t9_t;
+
+static const char* input_engine_t9_get_lang(input_engine_t* engine) {
+  input_engine_t9_t* t9 = (input_engine_t9_t*)engine;
+
+  return t9->lang;
+}
 
 static ret_t input_engine_t9_reset_input(input_engine_t* engine) {
   return RET_OK;
@@ -104,6 +111,8 @@ static ret_t input_engine_t9_set_lang(input_engine_t* engine, const char* lang) 
     log_debug("not support lang:%s\n", lang);
   }
 
+  tk_strncpy(t9->lang, lang, TK_NAME_LEN);
+
   return RET_OK;
 }
 
@@ -117,6 +126,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
   engine->reset_input = input_engine_t9_reset_input;
   engine->search = input_engine_table_search;
   engine->set_lang = input_engine_t9_set_lang;
+  engine->get_lang = input_engine_t9_get_lang;
   engine->im = im;
 
   t9->items = s_en_us_items;

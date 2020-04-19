@@ -350,6 +350,8 @@ ret_t input_method_commit_text(input_method_t* im, const char* text);
  *
  * > 有时在同一种语言环境下，也需要输入多种文字，典型的情况是同时输入中文和英文。
  * > 比如T9输入法，可以同时支持中文和英文输入，配合软键盘随时切换输入的语言。
+ * > 数字、小写字母、大写字母和符合也可以视为输入的语言。
+ * > 主要用于提示输入法引擎选择适当的输入方法。
  * 
  * @annotation ["scriptable"]
  * @param {input_method_t*} im 输入法对象。
@@ -358,6 +360,17 @@ ret_t input_method_commit_text(input_method_t* im, const char* text);
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
 ret_t input_method_set_lang(input_method_t* im, const char* lang);
+
+/**
+ * @method input_method_get_lang
+ * 获取语言。
+ *
+ * @annotation ["scriptable"]
+ * @param {input_method_t*} im 输入法对象。
+ *
+ * @return {const char*} 返回语言。
+ */
+const char* input_method_get_lang(input_method_t* im);
 
 /**
  * @method input_method_commit_text_ex
@@ -486,6 +499,14 @@ ret_t input_method_set(input_method_t* im);
 
 /*public for internal use*/
 event_t* im_commit_event_init(im_commit_event_t* e, const char* text, bool_t replace);
+
+#define IM_LANG_DIGIT "123"
+#define IM_LANG_LOWER "abc"
+#define IM_LANG_UPPER "ABC"
+#define IM_LANG_SYMBOL "sym"
+#define IM_LANG_EN_US "en_us"
+#define IM_LANG_ZH_CN "zh_cn"
+#define IM_LANG_ZH_TW "zh_tw"
 
 END_C_DECLS
 

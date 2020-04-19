@@ -29,6 +29,10 @@
 #include "ime_utils.h"
 #include "pinyin_table.inc"
 
+static const char* input_engine_spinyin_get_lang(input_engine_t* engine) {
+  return IM_LANG_ZH_CN;
+}
+
 static ret_t input_engine_spinyin_reset_input(input_engine_t* engine) {
   input_method_dispatch_candidates(engine->im, engine->candidates, 0);
 
@@ -70,6 +74,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
   engine->reset_input = input_engine_spinyin_reset_input;
   engine->search = input_engine_spinyin_search;
   engine->set_lang = input_engine_spinyin_set_lang;
+  engine->get_lang = input_engine_spinyin_get_lang;
   engine->im = im;
 
   return engine;

@@ -32,6 +32,11 @@
 #define MAX_WORD_LEN 32
 
 using namespace ime_pinyin;
+
+static const char* input_engine_pinyin_get_lang(input_engine_t* engine) {
+  return IM_LANG_ZH_CN;
+}
+
 static ret_t input_engine_pinyin_reset_input(input_engine_t* engine) {
   (void)engine;
   im_reset_search();
@@ -102,6 +107,7 @@ input_engine_t* input_engine_create(input_method_t* im) {
 
   engine->im = im;
   engine->search = input_engine_pinyin_search;
+  engine->get_lang = input_engine_pinyin_get_lang;
 
   im_open_decoder_rom();
   im_set_max_lens(32, 16);
