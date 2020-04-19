@@ -65,6 +65,9 @@ static ret_t candidates_on_button_click(void* ctx, event_t* e) {
     }
   }
 
+  button->parent->target = NULL;
+  button->parent->key_target = NULL;
+
   return RET_OK;
 }
 
@@ -164,7 +167,12 @@ static ret_t candidates_update_candidates(widget_t* widget, const char* strs, ui
   for (i = 0; i < nr; i++) {
     iter = children[i];
     widget_set_text_utf8(iter, text);
-    widget_set_focused(iter, i == 0);
+    if(candidates->pre) {
+      widget_set_focused(iter, i == 0);
+    } else {
+      widget_set_state(widget, WIDGET_STATE_NORMAL);
+      widget_set_need_update_style(widget);
+    }
     text += strlen(text) + 1;
   }
 

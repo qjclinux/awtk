@@ -51,7 +51,7 @@ static ret_t keyboard_on_event(widget_t* widget, event_t* e) {
   if (e->type == EVT_KEY_DOWN || e->type == EVT_KEY_UP) {
     key_event_t* evt = (key_event_t*)e;
     /*goto here only when grab_keys=true*/
-    if (e->type == EVT_KEY_DOWN) {
+    if (e->type == EVT_KEY_UP) {
       input_method_dispatch_key(input_method(), evt->key);
     }
     return RET_STOP;

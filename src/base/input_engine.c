@@ -76,7 +76,9 @@ ret_t input_engine_input(input_engine_t* engine, int key) {
       return RET_BAD_PARAMS;
     }
 
-    str_append_char(&(engine->keys), (char)key);
+    if(isprint(key)) {
+      str_append_char(&(engine->keys), (char)key);
+    }
   }
 
   if (engine->search) {

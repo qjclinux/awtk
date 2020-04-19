@@ -74,6 +74,7 @@ static ret_t input_engine_t9ext_add_chars(input_engine_t* engine, int c, wbuffer
 
 static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
+  const char* first = NULL;
   uint32_t keys_size = strlen(keys);
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
 
@@ -82,6 +83,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     return RET_OK;
   }
 
+  log_debug("keys:%s\n", keys);
   if (isdigit(keys[0])) {
     const table_entry_t* items = s_t9ext_numbers_pinyin;
     uint32_t items_nr = ARRAY_SIZE(s_t9ext_numbers_pinyin);
@@ -93,11 +95,15 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
       t9->pre_candidates_nr = 0;
     }
 
+    first = (const char*)(wb.data);
     t9->pre_candidates_nr += table_search(items, items_nr, keys, &wb, FALSE);
     if (t9->pre_candidates_nr == 0) {
       input_engine_reset_input(engine);
     } else {
       input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
+      if(keys_size > 1 && *first) {
+        input_engine_t9ext_search(engine, first);
+      }
     }
   } else {
     const table_entry_t* items = s_pinyin_chinese_items;
