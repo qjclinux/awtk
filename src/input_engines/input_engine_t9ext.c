@@ -56,22 +56,22 @@ static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
-static const char* num_chars[] = {
-    "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "",
+static const wchar_t* num_chars[] = {
+    L"，。 ", L"1ABCabc", L"2DEFdef", L"3GHIghi", 
+    L"4JKLjkl", L"5MNOmno", L"6PQRSpqrs", L"7TUVtuv", L"8WXYZwxyz", L"",
 };
 
 static ret_t input_engine_t9ext_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
-  char str[2];
+  char str[8];
   uint32_t n = 0;
-  const char* p = NULL;
+  const wchar_t* p = NULL;
   uint32_t index = c - '0';
   return_value_if_fail(index < 9, RET_BAD_PARAMS);
 
   p = num_chars[index];
-  memset(str, 0x00, sizeof(str));
-
   while (*p) {
-    str[0] = *p;
+    memset(str, 0x00, sizeof(str));
+    tk_utf8_from_utf16_ex(p, 1, str, sizeof(str));
     if (wbuffer_write_string(wb, str) != RET_OK) {
       break;
     }
