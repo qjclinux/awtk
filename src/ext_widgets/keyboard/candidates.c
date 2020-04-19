@@ -154,7 +154,7 @@ static ret_t candidates_relayout_children(widget_t* widget) {
   return RET_OK;
 }
 
-static ret_t candidates_update_candidates(widget_t* widget, const char* strs, uint32_t nr) {
+static ret_t candidates_update_candidates(widget_t* widget, const char* strs, uint32_t nr, int32_t selected) {
   uint32_t i = 0;
   widget_t* iter = NULL;
   const char* text = strs;
@@ -169,11 +169,10 @@ static ret_t candidates_update_candidates(widget_t* widget, const char* strs, ui
     iter = children[i];
     widget_set_visible(iter, TRUE, FALSE);
     widget_set_text_utf8(iter, text);
-    if (candidates->pre) {
-      widget_set_focused(iter, i == 0);
+    if (selected == i) {
+      widget_set_focused(iter, TRUE);
     } else {
-      widget_set_state(widget, WIDGET_STATE_NORMAL);
-      widget_set_need_update_style(widget);
+      widget_set_focused(iter, FALSE);
     }
     text += strlen(text) + 1;
   }
@@ -368,11 +367,11 @@ static ret_t candidates_on_im_candidates_event(void* ctx, event_t* e) {
 
   if (candidates->pre) {
     if (e->type == EVT_IM_SHOW_PRE_CANDIDATES) {
-      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr);
+      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr, evt->selected);
     }
   } else {
     if (e->type == EVT_IM_SHOW_CANDIDATES) {
-      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr);
+      candidates_update_candidates(widget, evt->candidates, evt->candidates_nr, evt->selected);
     }
   }
 

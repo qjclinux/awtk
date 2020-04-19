@@ -194,12 +194,14 @@ ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uin
   return input_method_dispatch(im, (event_t*)(&ce));
 }
 
-ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr) {
+ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr, 
+    int32_t selected) {
   im_candidates_event_t ce;
 
   ce.e = event_init(EVT_IM_SHOW_PRE_CANDIDATES, im);
   ce.candidates_nr = nr;
   ce.candidates = strs;
+  ce.selected = selected;
 
   return input_method_dispatch(im, (event_t*)(&ce));
 }

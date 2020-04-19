@@ -115,6 +115,7 @@ typedef struct _im_commit_event_t {
    * 是否替换原来的文本。
    */
   bool_t replace;
+
 } im_commit_event_t;
 
 /**
@@ -158,6 +159,13 @@ typedef struct _im_candidates_event_t {
    * 可选的文本的个数。
    */
   uint32_t candidates_nr;
+  
+  /**
+   * @property {int32_t} selected;
+   * @annotation ["readable"]
+   * 缺省选中某个候选字，小余0不选择任何候选字 。
+   */
+  int32_t selected;
 } im_candidates_event_t;
 
 /**
@@ -456,10 +464,12 @@ ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uin
  * @param {input_method_t*} im 输入法对象。
  * @param {char*} strs 候选字列表。
  * @param {uint32_t} nr 候选字个数。
+ * @param {int32_t} selected 缺省选中候选字的序数。
  *
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
-ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr);
+ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, 
+    uint32_t nr, int32_t selected);
 
 /**
  * @method input_method_create

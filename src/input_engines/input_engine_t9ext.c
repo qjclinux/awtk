@@ -88,7 +88,7 @@ static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
 static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
 
-  input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, 0);
+  input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, 0, -1);
 
   return RET_OK;
 }
@@ -97,14 +97,14 @@ static const wchar_t* s_table_num_chars[] = {L"",        L"，。？！",  L"2AB
                                      L"4GHIghi", L"5JKLjkl",   L"6MNOmno", L"7PQRSpqrs",
                                      L"8TUVtuv", L"9WXYZwxyz", NULL};
 
-static ret_t input_engine_t9ext_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
+static ret_t input_engine_t9ext_add_chars(wbuffer_t* wb, const wchar_t** table, char c) {
   char str[8];
   uint32_t n = 0;
   const wchar_t* p = NULL;
   uint32_t index = c - '0';
   return_value_if_fail(index >= 0 && index <= 9, RET_BAD_PARAMS);
 
-  p = s_table_num_chars[index];
+  p = table[index];
   while (*p) {
     memset(str, 0x00, sizeof(str));
     tk_utf8_from_utf16_ex(p, 1, str, sizeof(str));
@@ -146,6 +146,7 @@ static ret_t input_engine_t9ext_preedit_confirm_timer(const timer_info_t* info) 
   t9->last_c = 0;
   t9->timer_id = TK_INVALID_ID;
   input_method_dispatch_preedit_confirm(engine->im);
+  input_engine_reset_input(engine);
 
   return RET_REMOVE;
 }
@@ -153,6 +154,7 @@ static ret_t input_engine_t9ext_preedit_confirm_timer(const timer_info_t* info) 
 static ret_t input_engine_t9ext_search_alpha(input_engine_t* engine, char c,
                                              const wchar_t** table) {
   uint32_t i = 0;
+  wbuffer_t wb;
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
   return_value_if_fail(c >= '2' && c <= '9', RET_FAIL);
 
@@ -175,9 +177,14 @@ static ret_t input_engine_t9ext_search_alpha(input_engine_t* engine, char c,
       t9->index = (t9->index + 1) % wcslen(table[i]);
     }
   }
-
+  
   input_engine_t9ext_commit_char(engine, table[i][t9->index]);
   engine->keys.size = 0;
+
+  wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
+  t9->pre_candidates_nr = input_engine_t9ext_add_chars(&wb, table, c);
+  input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr, t9->index);
+
 
   return RET_OK;
 }
@@ -215,11 +222,11 @@ static ret_t input_engine_t9ext_search_zh(input_engine_t* engine, const char* ke
     if (t9->pre_candidates_nr == 0) {
       input_engine_reset_input(engine);
     } else {
-      input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
+      input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr, 0);
 
       wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
       if (keys_size == 1) {
-        engine->candidates_nr = input_engine_t9ext_add_chars(engine, keys[0], &wb);
+        engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, *keys);
       } else if (*first) {
         /*map first pinyin to Chinese chars*/
         const table_entry_t* items = s_pinyin_chinese_items;
@@ -270,10 +277,10 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     t9->pre_candidates_nr = 1;
     wbuffer_write_string(&wb, keys);
     input_engine_reset_input(engine);
-    input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr);
+    input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr, 0);
 
     wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-    engine->candidates_nr = input_engine_t9ext_add_chars(engine, '1', &wb);
+    engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, '1');
     input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
 
     return RET_OK;
