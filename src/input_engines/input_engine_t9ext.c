@@ -60,6 +60,8 @@ static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
 
   if (key == SWITCH_INPUT_MODE_KEY) {
+    event_t e = event_init(EVT_IM_LANG_CHANGED, engine->im);
+
     t9->mode = (t9->mode + 1) % INPUT_MODE_NR;
     input_engine_reset_input(engine);
 
@@ -69,6 +71,8 @@ static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
       timer_remove(t9->timer_id);
       t9->timer_id = TK_INVALID_ID;
     }
+
+    input_method_dispatch(engine->im, &e);
     input_method_dispatch_candidates(engine->im, engine->candidates, 0);
 
     return RET_FAIL;

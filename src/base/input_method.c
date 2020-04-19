@@ -163,7 +163,12 @@ ret_t input_method_dispatch_keys(input_method_t* im, const char* keys) {
 ret_t input_method_set_lang(input_method_t* im, const char* lang) {
   return_value_if_fail(im != NULL, RET_BAD_PARAMS);
   if (im->engine != NULL) {
-    return input_engine_set_lang(im->engine, lang);
+    if (input_engine_set_lang(im->engine, lang) == RET_OK) {
+      event_t e = event_init(EVT_IM_LANG_CHANGED, im);
+      input_method_dispatch(im, &e);
+
+      return RET_OK;
+    }
   }
 
   return RET_FAIL;

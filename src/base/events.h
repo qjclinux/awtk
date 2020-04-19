@@ -320,6 +320,11 @@ typedef enum _event_type_t {
    */
   EVT_IM_SHOW_PRE_CANDIDATES,
   /**
+   * @const EVT_IM_LANG_CHANGED
+   * 输入法语言改变事件(event_t)。
+   */
+  EVT_IM_LANG_CHANGED,
+  /**
    * @const EVT_IM_ACTION
    * 软键盘Action点击事件(event_t)。
    */
