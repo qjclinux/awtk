@@ -93,10 +93,12 @@ static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
-static const wchar_t* s_table_num_chars[] = {L"",        L"，。、：；？！《》『』（）{}【】",  
+static const wchar_t* s_table_num_chars[] = {L"",        L"，。、：；？！《》『』（）{}【】",
                                              L"2ABCabc", L"3DEFdef",
-                                             L"4GHIghi", L"5JKLjkl",   L"6MNOmno", L"7PQRSpqrs",
-                                             L"8TUVtuv", L"9WXYZwxyz", NULL};
+                                             L"4GHIghi", L"5JKLjkl",
+                                             L"6MNOmno", L"7PQRSpqrs",
+                                             L"8TUVtuv", L"9WXYZwxyz",
+                                             NULL};
 
 static ret_t input_engine_t9ext_add_chars(wbuffer_t* wb, const wchar_t** table, char c) {
   char str[8];
@@ -133,11 +135,19 @@ static ret_t input_engine_t9ext_search_digit(input_engine_t* engine, const char*
   return RET_OK;
 }
 
-static const wchar_t* s_table_num_lower[] = {L"",    L"",     L"abc", L"def",  L"ghi", L"jkl",
-                                             L"mno", L"pqrs", L"tuv", L"wxyz", NULL};
+static const wchar_t* s_table_num_lower[] = {L" ",   L",.?:/@;:\"\'#$%^&*()_+-={}[]<>|\\",
+                                             L"abc", L"def",
+                                             L"ghi", L"jkl",
+                                             L"mno", L"pqrs",
+                                             L"tuv", L"wxyz",
+                                             NULL};
 
-static const wchar_t* s_table_num_upper[] = {L"",    L"",     L"ABC", L"DEF",  L"GHI", L"JKL",
-                                             L"MNO", L"PQRS", L"TUV", L"WXYZ", NULL};
+static const wchar_t* s_table_num_upper[] = {L" ",   L",.?:/@;:\"\'#$%^&*()_+-={}[]<>|\\",
+                                             L"ABC", L"DEF",
+                                             L"GHI", L"JKL",
+                                             L"MNO", L"PQRS",
+                                             L"TUV", L"WXYZ",
+                                             NULL};
 
 static ret_t input_engine_t9ext_preedit_confirm_timer(const timer_info_t* info) {
   input_engine_t* engine = (input_engine_t*)(info->ctx);
@@ -157,7 +167,7 @@ static ret_t input_engine_t9ext_search_alpha(input_engine_t* engine, char c,
   uint32_t i = 0;
   wbuffer_t wb;
   input_engine_t9ext_t* t9 = (input_engine_t9ext_t*)engine;
-  return_value_if_fail(c >= '2' && c <= '9', RET_FAIL);
+  return_value_if_fail(c >= '0' && c <= '9', RET_FAIL);
 
   i = c - '0';
   if (t9->timer_id == TK_INVALID_ID) {
@@ -275,20 +285,6 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     input_method_commit_text(engine->im, " ");
 
     return RET_OK;
-  } else if (keys[0] == '1') {
-    wbuffer_t wb;
-    wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
-
-    t9->pre_candidates_nr = 1;
-    wbuffer_write_string(&wb, keys);
-    input_engine_reset_input(engine);
-    input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr, 0);
-
-    wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-    engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, '1');
-    input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
-
-    return RET_OK;
   }
 
   switch (t9->mode) {
@@ -298,7 +294,25 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
     case INPUT_MODE_UPPER: {
       return input_engine_t9ext_search_upper(engine, keys);
     }
-    default: { return input_engine_t9ext_search_zh(engine, keys); }
+    default: {
+      if (keys[0] == '1') {
+        wbuffer_t wb;
+        wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
+
+        t9->pre_candidates_nr = 1;
+        wbuffer_write_string(&wb, keys);
+        input_engine_reset_input(engine);
+        input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr,
+                                             0);
+
+        wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
+        engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, '1');
+        input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
+
+        return RET_OK;
+      }
+      return input_engine_t9ext_search_zh(engine, keys);
+    }
   }
 
   return RET_OK;
@@ -320,7 +334,7 @@ static const char* input_engine_t9ext_get_lang(input_engine_t* engine) {
     case INPUT_MODE_UPPER: {
       return IM_LANG_UPPER;
     }
-    default: { return IM_LANG_ZH_CN; }
+    default: { return "pinyin"; }
   }
 }
 

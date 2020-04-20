@@ -129,6 +129,7 @@ static ret_t candidates_relayout_children(widget_t* widget) {
   xy_t child_x = margin;
   xy_t child_y = margin;
   widget_t* iter = NULL;
+  widget_t* focused = NULL;
   uint32_t nr = widget->children->size;
   wh_t child_h = widget->h - margin * 2;
   candidates_t* candidates = CANDIDATES(widget);
@@ -150,10 +151,18 @@ static ret_t candidates_relayout_children(widget_t* widget) {
     }
     widget_move_resize(iter, child_x, child_y, child_w, child_h);
     child_x += child_w + margin;
+
+    if (iter->focused) {
+      focused = iter;
+    }
   }
 
-  hscrollable_set_xoffset(candidates->hscrollable, 0);
   hscrollable_set_virtual_w(candidates->hscrollable, child_x + 30);
+  if (focused != NULL && focused->x > widget->w / 2) {
+    hscrollable_set_xoffset(candidates->hscrollable, focused->x);
+  } else {
+    hscrollable_set_xoffset(candidates->hscrollable, 0);
+  }
 
   return RET_OK;
 }

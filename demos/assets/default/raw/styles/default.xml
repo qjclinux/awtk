@@ -157,7 +157,7 @@
 
 <lang_indicator>
   <style name="default">
-    <normal text_color="green" />
+    <normal text_color="white" bg_color="#1296db"/>
   </style>
 </lang_indicator>
 
