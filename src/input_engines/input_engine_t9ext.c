@@ -75,7 +75,7 @@ static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
     input_method_dispatch(engine->im, &e);
     input_method_dispatch_candidates(engine->im, engine->candidates, 0);
 
-    return RET_FAIL;
+    return RET_OK;
   }
 
   if (key >= TK_KEY_0 && key <= TK_KEY_9) {
