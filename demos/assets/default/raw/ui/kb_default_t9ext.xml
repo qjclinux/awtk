@@ -12,4 +12,5 @@
       button_style="candidates_focusable"
       auto_hide="true"
       select_by_num="false"/>
+   <lang_indicator self_layout="default(x=r:2, y=2, w=60, h=20)" />
 </keyboard>
