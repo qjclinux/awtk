@@ -83,7 +83,7 @@ struct _input_engine_t {
 
   /*private*/
   input_method_t* im;
-  char lang[TK_NAME_LEN+1];
+  char lang[TK_NAME_LEN + 1];
 };
 
 /**

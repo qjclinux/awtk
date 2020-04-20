@@ -76,7 +76,7 @@ typedef struct _candidates_t {
    * 
    */
   bool_t select_by_num;
-  
+
   /**
    * @property {bool_t} auto_hide
    * @annotation ["set_prop","get_prop","readable","persitent","design","scriptable"]

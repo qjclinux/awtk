@@ -159,7 +159,7 @@ typedef struct _im_candidates_event_t {
    * 可选的文本的个数。
    */
   uint32_t candidates_nr;
-  
+
   /**
    * @property {int32_t} selected;
    * @annotation ["readable"]
@@ -468,8 +468,8 @@ ret_t input_method_dispatch_candidates(input_method_t* im, const char* strs, uin
  *
  * @return {ret_t} 返回RET_OK表示成功，否则表示失败。
  */
-ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, 
-    uint32_t nr, int32_t selected);
+ret_t input_method_dispatch_pre_candidates(input_method_t* im, const char* strs, uint32_t nr,
+                                           int32_t selected);
 
 /**
  * @method input_method_create

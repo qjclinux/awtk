@@ -154,7 +154,8 @@ static ret_t candidates_relayout_children(widget_t* widget) {
   return RET_OK;
 }
 
-static ret_t candidates_update_candidates(widget_t* widget, const char* strs, uint32_t nr, int32_t selected) {
+static ret_t candidates_update_candidates(widget_t* widget, const char* strs, uint32_t nr,
+                                          int32_t selected) {
   uint32_t i = 0;
   widget_t* iter = NULL;
   const char* text = strs;
@@ -339,11 +340,9 @@ static ret_t candidates_on_keydown(widget_t* widget, key_event_t* e) {
   return ret;
 }
 
-static const char* const s_candidates_properties[] = {CANDIDATES_PROP_PRE, 
-  CANDIDATES_PROP_SELECT_BY_NUM,
-  CANDIDATES_PROP_BUTTON_STYLE,
-  CANDIDATES_PROP_AUTO_HIDE,
-  NULL};
+static const char* const s_candidates_properties[] = {
+    CANDIDATES_PROP_PRE, CANDIDATES_PROP_SELECT_BY_NUM, CANDIDATES_PROP_BUTTON_STYLE,
+    CANDIDATES_PROP_AUTO_HIDE, NULL};
 
 TK_DECL_VTABLE(candidates) = {.size = sizeof(candidates_t),
                               .scrollable = TRUE,
