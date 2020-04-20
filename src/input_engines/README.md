@@ -48,6 +48,8 @@
 
 > 如果需要 T9 输入法，而且没有触摸屏，使用外部硬键盘，请使用本引擎。
 
+> 在PC上模拟测试时，可以用ESC键切换输入模式，在嵌入式平台可以重定义宏SWITCH\_INPUT\_MODE\_KEY来指定切换的按键。
+
 ## 2.数据生成
 
 * t9\_en\_us.inc	由 tools/ime\_gen/to\_t9\_en.js  根据 english\_words.txt 生成。
