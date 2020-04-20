@@ -93,7 +93,8 @@ static ret_t input_engine_t9ext_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
-static const wchar_t* s_table_num_chars[] = {L"",        L"，。？！",  L"2ABCabc", L"3DEFdef",
+static const wchar_t* s_table_num_chars[] = {L"",        L"，。、：；？！《》『』（）{}【】",  
+                                             L"2ABCabc", L"3DEFdef",
                                              L"4GHIghi", L"5JKLjkl",   L"6MNOmno", L"7PQRSpqrs",
                                              L"8TUVtuv", L"9WXYZwxyz", NULL};
 
