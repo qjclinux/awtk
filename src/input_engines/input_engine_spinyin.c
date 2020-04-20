@@ -51,11 +51,10 @@ static ret_t input_engine_spinyin_search(input_engine_t* engine, const char* key
   }
 
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-  engine->candidates_nr = table_search(items, items_nr, keys, &wb, FALSE);
-  if (engine->candidates_nr == 0) {
-    engine->candidates_nr = 1;
-    wbuffer_write_string(&wb, keys);
-  }
+  
+  engine->candidates_nr = 1;
+  wbuffer_write_string(&wb, keys);
+  engine->candidates_nr += table_search(items, items_nr, keys, &wb, FALSE);
   input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
 
   return RET_OK;

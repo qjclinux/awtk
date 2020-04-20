@@ -34,9 +34,9 @@ TK_TOOLS_ROOT = joinPath(TK_ROOT, 'tools')
 TK_DEMO_ROOT  = joinPath(TK_ROOT, 'demos')
 GTEST_ROOT    = joinPath(TK_ROOT, '3rd/gtest/googletest')
 
-INPUT_ENGINE='null'
+#INPUT_ENGINE='null'
 INPUT_ENGINE='spinyin'
-INPUT_ENGINE='t9'
+#INPUT_ENGINE='t9'
 #INPUT_ENGINE='t9ext'
 #INPUT_ENGINE='pinyin'
 
