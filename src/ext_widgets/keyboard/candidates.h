@@ -96,7 +96,6 @@ typedef struct _candidates_t {
   bool_t expanded;
   wh_t normal_h;
   uint32_t event_id;
-  canvas_t* canvas;
   hscrollable_t* hscrollable;
   uint32_t candidates_nr;
 } candidates_t;

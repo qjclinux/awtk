@@ -133,15 +133,15 @@ static ret_t candidates_relayout_children(widget_t* widget) {
   wh_t child_h = widget->h - margin * 2;
   candidates_t* candidates = CANDIDATES(widget);
   widget_t** children = (widget_t**)(widget->children->elms);
-  canvas_t* c = candidates->canvas;
   style_t* style = children[0]->astyle;
+  canvas_t* c = widget_get_canvas(widget);
   const char* font = system_info_fix_font_name(NULL);
   uint16_t font_size = style_get_int(style, STYLE_ID_FONT_SIZE, TK_DEFAULT_FONT_SIZE);
 
   canvas_set_font(c, font, font_size);
   for (i = 0; i < nr; i++) {
     iter = children[i];
-    child_w = candidates_calc_child_width(candidates->canvas, iter);
+    child_w = candidates_calc_child_width(c, iter);
     if (iter->text.size) {
       widget_set_visible(iter, TRUE, FALSE);
     } else {
@@ -217,7 +217,6 @@ static ret_t candidates_on_paint_self(widget_t* widget, canvas_t* c) {
   candidates_t* candidates = CANDIDATES(widget);
   return_value_if_fail(widget != NULL && candidates != NULL, RET_BAD_PARAMS);
 
-  candidates->canvas = c;
   return widget_paint_helper(widget, c, NULL, NULL);
 }
 
