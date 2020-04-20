@@ -69,6 +69,20 @@ ret_t input_engine_search_with_keys(input_engine_t* engine, const char* keys) {
   return input_engine_search(engine, keys);
 }
 
+static ret_t input_engine_append_char(input_engine_t* engine, int key) {
+  if (key == TK_KEY_TAB || key == TK_KEY_LEFT || key == TK_KEY_RIGHT || key == TK_KEY_UP ||
+      key == TK_KEY_DOWN || key == TK_KEY_PAGEUP || key == TK_KEY_PAGEDOWN ||
+      key == TK_KEY_RETURN || key == TK_KEY_CANCEL) {
+    return RET_OK;
+  }
+
+  if (isprint(key)) {
+    str_append_char(&(engine->keys), (char)key);
+  }
+
+  return RET_OK;
+}
+
 ret_t input_engine_input(input_engine_t* engine, int key) {
   ret_t ret = RET_OK;
   return_value_if_fail(engine != NULL, RET_BAD_PARAMS);
@@ -88,12 +102,12 @@ ret_t input_engine_input(input_engine_t* engine, int key) {
 
     if (engine->input != NULL) {
       if (engine->input(engine, key) == RET_OK) {
-        str_append_char(&(engine->keys), (char)key);
+        input_engine_append_char(engine, key);
       } else {
         return RET_FAIL;
       }
     } else {
-      str_append_char(&(engine->keys), (char)key);
+      input_engine_append_char(engine, key);
     }
   }
 

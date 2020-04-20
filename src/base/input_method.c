@@ -131,19 +131,9 @@ static ret_t input_method_dispatch_key_only(input_method_t* im, uint32_t key) {
 ret_t input_method_dispatch_key(input_method_t* im, uint32_t key) {
   return_value_if_fail(im != NULL, RET_BAD_PARAMS);
 
-  if (key == TK_KEY_TAB || key == TK_KEY_LEFT || key == TK_KEY_RIGHT || key == TK_KEY_UP ||
-      key == TK_KEY_DOWN || key == TK_KEY_PAGEUP || key == TK_KEY_PAGEDOWN ||
-      key == TK_KEY_RETURN || key == TK_KEY_CANCEL) {
-    return input_method_dispatch_key_only(im, key);
-  }
-
   if (im->engine != NULL) {
     if (input_engine_input(im->engine, (char)key) == RET_OK) {
       return RET_OK;
-    } else {
-      if (key != TK_KEY_BACKSPACE && key != TK_KEY_DELETE) {
-        return RET_FAIL;
-      }
     }
   }
 

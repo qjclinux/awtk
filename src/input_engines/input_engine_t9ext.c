@@ -53,7 +53,7 @@ typedef struct _input_engine_t9ext_t {
 } input_engine_t9ext_t;
 
 #ifndef SWITCH_INPUT_MODE_KEY
-#define SWITCH_INPUT_MODE_KEY TK_KEY_w
+#define SWITCH_INPUT_MODE_KEY TK_KEY_ESCAPE
 #endif /*SWITCH_INPUT_MODE_KEY*/
 
 static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
@@ -79,6 +79,11 @@ static ret_t input_engine_t9ext_input(input_engine_t* engine, int key) {
   }
 
   if (key >= TK_KEY_0 && key <= TK_KEY_9) {
+    return RET_OK;
+  }
+
+  if (key == TK_KEY_TAB) {
+    widget_focus_next(engine->im->widget);
     return RET_OK;
   }
 

@@ -650,6 +650,8 @@ const char* s_mledit_properties[] = {
 
 TK_DECL_VTABLE(mledit) = {.size = sizeof(mledit_t),
                           .type = WIDGET_TYPE_MLEDIT,
+                          .focusable = TRUE,
+                          .inputable = TRUE,
                           .clone_properties = s_mledit_properties,
                           .persistent_properties = s_mledit_properties,
                           .parent = TK_PARENT_VTABLE(widget),
