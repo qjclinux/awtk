@@ -220,7 +220,10 @@ static ret_t input_engine_t9ext_search_zh(input_engine_t* engine, const char* ke
 
     t9->pre_candidates_nr += table_search(items, items_nr, keys, &wb, FALSE);
     if (t9->pre_candidates_nr == 0) {
-      input_engine_reset_input(engine);
+      t9->pre_candidates_nr = 1;
+      wbuffer_write_string(&wb, keys);
+      input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr,
+                                           0);
     } else {
       input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr,
                                            0);

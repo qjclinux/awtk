@@ -68,7 +68,7 @@ static ret_t lang_indicator_on_paint_self(widget_t* widget, canvas_t* c) {
   lang_indicator_t* lang_indicator = LANG_INDICATOR(widget);
   const char* lang = input_method_get_lang(input_method());
 
-  if(lang_indicator->image != NULL) {
+  if (lang_indicator->image != NULL) {
     char icon[128];
     tk_snprintf(icon, sizeof(icon), "%s%s", lang_indicator->image, lang != NULL ? lang : "none");
     widget_paint_helper(widget, c, icon, NULL);
@@ -81,20 +81,20 @@ static ret_t lang_indicator_on_paint_self(widget_t* widget, canvas_t* c) {
 }
 
 TK_DECL_VTABLE(lang_indicator) = {.size = sizeof(lang_indicator_t),
-                        .type = WIDGET_TYPE_LANG_INDICATOR,
-                        .parent = TK_PARENT_VTABLE(widget),
-                        .set_prop = lang_indicator_set_prop,
-                        .get_prop = lang_indicator_get_prop,
-                        .on_destroy = lang_indicator_on_destroy,
-                         .on_paint_self = lang_indicator_on_paint_self,
-                        .create = lang_indicator_create};
+                                  .type = WIDGET_TYPE_LANG_INDICATOR,
+                                  .parent = TK_PARENT_VTABLE(widget),
+                                  .set_prop = lang_indicator_set_prop,
+                                  .get_prop = lang_indicator_get_prop,
+                                  .on_destroy = lang_indicator_on_destroy,
+                                  .on_paint_self = lang_indicator_on_paint_self,
+                                  .create = lang_indicator_create};
 
 widget_t* lang_indicator_create(widget_t* parent, xy_t x, xy_t y, wh_t w, wh_t h) {
   widget_t* widget = widget_create(parent, TK_REF_VTABLE(lang_indicator), x, y, w, h);
   lang_indicator_t* lang_indicator = LANG_INDICATOR(widget);
 
-  lang_indicator->event_id = input_method_on(input_method(), EVT_IM_LANG_CHANGED, 
-      lang_indicator_on_lang_changed, widget);
+  lang_indicator->event_id =
+      input_method_on(input_method(), EVT_IM_LANG_CHANGED, lang_indicator_on_lang_changed, widget);
 
   return widget;
 }

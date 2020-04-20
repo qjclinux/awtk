@@ -64,7 +64,7 @@ typedef struct _lang_indicator_t {
   char* image;
 
   /*private*/
-  uint32_t event_id; 
+  uint32_t event_id;
 } lang_indicator_t;
 
 /**

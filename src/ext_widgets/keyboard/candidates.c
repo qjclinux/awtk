@@ -51,6 +51,7 @@ static ret_t candidates_on_button_click(void* ctx, event_t* e) {
   widget_t* button = WIDGET(e->target);
   input_method_t* im = input_method();
   wstr_t* text = &(button->text);
+  candidates_t* candidates = CANDIDATES(ctx);
   return_value_if_fail(im != NULL, RET_FAIL);
 
   if (text->size > 0) {
@@ -58,13 +59,15 @@ static ret_t candidates_on_button_click(void* ctx, event_t* e) {
 
     tk_utf8_from_utf16(text->str, str, sizeof(str) - 1);
     if (input_method_commit_text(im, str) == RET_OK) {
-      suggest_words_t* suggest_words = im->suggest_words;
-      if (suggest_words && suggest_words_find(suggest_words, c) == RET_OK) {
-        input_method_dispatch_candidates(im, suggest_words->words, suggest_words->words_nr);
-        if (suggest_words->words_nr > 0) {
-          widget_set_focused(widget_get_child(button->parent, 0), TRUE);
+      if (!candidates->pre) {
+        suggest_words_t* suggest_words = im->suggest_words;
+        if (suggest_words && suggest_words_find(suggest_words, c) == RET_OK) {
+          input_method_dispatch_candidates(im, suggest_words->words, suggest_words->words_nr);
+          if (suggest_words->words_nr > 0) {
+            widget_set_focused(widget_get_child(button->parent, 0), TRUE);
+          }
+          log_debug("suggest_words->words:%s\n", suggest_words->words);
         }
-        log_debug("suggest_words->words:%s\n", suggest_words->words);
       }
     }
   }
@@ -80,6 +83,7 @@ static ret_t candidates_create_button(widget_t* widget) {
   widget_use_style(button, "candidates");
   if (candidates->pre) {
     widget_on(button, EVT_FOCUS, candidates_on_button_focused, widget);
+    widget_on(button, EVT_CLICK, candidates_on_button_click, widget);
   } else {
     widget_on(button, EVT_CLICK, candidates_on_button_click, widget);
   }
