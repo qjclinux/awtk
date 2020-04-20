@@ -10,56 +10,56 @@
 
 ### 1.1 null 输入引擎法
 
-* 文件 input_engine_null.c   
-* 宏：WITH_IME_NULL
+* 文件 input\_engine\_null.c   
+* 宏：WITH\_IME\_NULL
 
 > 如果不需要中文输入法，但又需要软键盘，请启用本引擎。
 
 ### 1.2 Goole 拼音输入引擎
 
-* 文件：input_engine_pinyin.cpp
-* 宏：WITH_IME_PINYIN
+* 文件：input\_engine\_pinyin.cpp
+* 宏：WITH\_IME\_PINYIN
 
 > 如果需要拼音输入法，推荐使用本引擎。
 
 ### 1.3 简单的拼音输入引擎
 
-* 文件：input_engine_spinyin.c  
-* 宏：WITH_IME_SPINYIN
+* 文件：input\_engine\_spinyin.c  
+* 宏：WITH\_IME\_SPINYIN
 
 > 优点是简单，如果不想用 Goole 拼音输入引擎，可以使用本引擎。
 
 ### 1.4 带触屏的 T9 输入法引擎
 
-* 文件：input_engine_t9.c       
-* 宏：WITH_IME_SPINYIN：
+* 文件：input\_engine\_t9.c       
+* 宏：WITH\_IME\_SPINYIN：
 * 软键盘：
-    * 缺省软键盘：demos/assets/default/raw/ui/kb_default_t9.xml
-    * ascii 软键盘：demos/assets/default/raw/ui/kb_ascii_t9.xml
+    * 缺省软键盘：demos/assets/default/raw/ui/kb\_default\_t9.xml
+    * ascii 软键盘：demos/assets/default/raw/ui/kb\_ascii\_t9.xml
 
 > 如果需要 T9 输入法，带有触摸屏，请使用本引擎。
 
 ### 1.5 不带触屏的 T9 输入法引擎
 
-* 文件：input_engine_t9ext.c
-* 宏：WITH_IME_T9EXT
+* 文件：input\_engine\_t9ext.c
+* 宏：WITH\_IME\_T9EXT
 * 软键盘：
-    * 缺省软键盘：demos/assets/default/raw/ui/kb_default_t9ext.xml
+    * 缺省软键盘：demos/assets/default/raw/ui/kb\_default\_t9ext.xml
 
 > 如果需要 T9 输入法，而且没有触摸屏，使用外部硬键盘，请使用本引擎。
 
 ## 2.数据生成
 
-* t9_en_us.inc	由 tools/ime_gen/to_t9_en.js  根据 english_words.txt 生成。
-* pinyin_table.inc 由 tools/ime_gen/to_pinyin.js 根据 chinese_words.txt 生成。	
-* t9_zh_cn.inc	由 tools/ime_gen/to_t9_zh.js 根据 chinese_words.txt 生成。	
-* t9ext_zh_cn.inc 由 tools/ime_gen/to_t9ext_zh.js 根据 chinese_words.txt 生成。	 
+* t9\_en\_us.inc	由 tools/ime\_gen/to\_t9\_en.js  根据 english\_words.txt 生成。
+* pinyin\_table.inc 由 tools/ime\_gen/to\_pinyin.js 根据 chinese\_words.txt 生成。	
+* t9\_zh\_cn.inc	由 tools/ime\_gen/to\_t9\_zh.js 根据 chinese\_words.txt 生成。	
+* t9ext\_zh\_cn.inc 由 tools/ime\_gen/to\_t9ext\_zh.js 根据 chinese\_words.txt 生成。	 
 
 如果需要裁剪，请编辑相应的输入文件，并重新生成。
 
 ## 3. Scons 编译脚本
 
-编辑 awtk_config.py 中的 INPUT_ENGINE，可以选择不同的输入法引擎。
+编辑 awtk\_config.py 中的 INPUT\_ENGINE，可以选择不同的输入法引擎。
 
 ```
 #INPUT_ENGINE='null'
@@ -82,3 +82,4 @@ INPUT_ENGINE='pinyin'
   <mledit x="10" y="90" w="-20" h="80" keyboard="kb_default_t9ext" focused="true" />
 </window>
 ```
+
