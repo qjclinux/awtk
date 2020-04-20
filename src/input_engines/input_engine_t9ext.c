@@ -105,28 +105,6 @@ static const wchar_t* s_table_num_chars[] = {L"",        L"，。、：；？！
                                              L"8TUVtuv", L"9WXYZwxyz",
                                              NULL};
 
-static ret_t input_engine_t9ext_add_chars(wbuffer_t* wb, const wchar_t** table, char c) {
-  char str[8];
-  uint32_t n = 0;
-  const wchar_t* p = NULL;
-  uint32_t index = c - '0';
-  return_value_if_fail(index >= 0 && index <= 9, RET_BAD_PARAMS);
-
-  p = table[index];
-  while (*p) {
-    memset(str, 0x00, sizeof(str));
-    tk_utf8_from_utf16_ex(p, 1, str, sizeof(str));
-
-    if (wbuffer_write_string(wb, str) != RET_OK) {
-      break;
-    }
-    n++;
-    p++;
-  }
-
-  return n;
-}
-
 static ret_t input_engine_t9ext_commit_char(input_engine_t* engine, char c) {
   char str[2] = {c, 0};
 
@@ -198,7 +176,7 @@ static ret_t input_engine_t9ext_search_alpha(input_engine_t* engine, char c,
   engine->keys.size = 0;
 
   wbuffer_init(&wb, (uint8_t*)(t9->pre_candidates), sizeof(t9->pre_candidates));
-  t9->pre_candidates_nr = input_engine_t9ext_add_chars(&wb, table, c);
+  t9->pre_candidates_nr = input_engine_add_chars(&wb, table, c);
   input_method_dispatch_pre_candidates(engine->im, t9->pre_candidates, t9->pre_candidates_nr,
                                        t9->index);
 
@@ -246,7 +224,7 @@ static ret_t input_engine_t9ext_search_zh(input_engine_t* engine, const char* ke
 
       wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
       if (keys_size == 1) {
-        engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, *keys);
+        engine->candidates_nr = input_engine_add_chars(&wb, s_table_num_chars, *keys);
       } else if (*first) {
         /*map first pinyin to Chinese chars*/
         const table_entry_t* items = s_pinyin_chinese_items;
@@ -311,7 +289,7 @@ static ret_t input_engine_t9ext_search(input_engine_t* engine, const char* keys)
                                              0);
 
         wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
-        engine->candidates_nr = input_engine_t9ext_add_chars(&wb, s_table_num_chars, '1');
+        engine->candidates_nr = input_engine_add_chars(&wb, s_table_num_chars, '1');
         input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
 
         return RET_OK;

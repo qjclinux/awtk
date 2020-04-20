@@ -20,6 +20,7 @@
  */
 #include "tkc/mem.h"
 #include "tkc/utf8.h"
+#include "tkc/utils.h"
 #include "tkc/buffer.h"
 #include "base/input_engine.h"
 
@@ -47,31 +48,9 @@ static ret_t input_engine_t9_reset_input(input_engine_t* engine) {
   return RET_OK;
 }
 
-static const char* num_chars[] = {
-    "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "",
+static const wchar_t* s_table_num_chars[] = {
+    L"", L"ABC", L"DEF", L"GHI", L"JKL", L"MNO", L"PQRS", L"TUV", L"WXYZ", L"",
 };
-
-static ret_t input_engine_t9_add_chars(input_engine_t* engine, int c, wbuffer_t* wb) {
-  char str[2];
-  uint32_t n = 0;
-  const char* p = NULL;
-  uint32_t index = c - '0';
-  return_value_if_fail(index < 9, RET_BAD_PARAMS);
-
-  p = num_chars[index];
-  memset(str, 0x00, sizeof(str));
-
-  while (*p) {
-    str[0] = *p;
-    if (wbuffer_write_string(wb, str) != RET_OK) {
-      break;
-    }
-    n++;
-    p++;
-  }
-
-  return n;
-}
 
 static ret_t input_engine_table_search(input_engine_t* engine, const char* keys) {
   wbuffer_t wb;
@@ -80,18 +59,19 @@ static ret_t input_engine_table_search(input_engine_t* engine, const char* keys)
 
   wbuffer_init(&wb, (uint8_t*)(engine->candidates), sizeof(engine->candidates));
   if (keys_size == 1) {
-    engine->candidates_nr = input_engine_t9_add_chars(engine, keys[0], &wb);
+    engine->candidates_nr = input_engine_add_chars(&wb, s_table_num_chars, keys[0]);
   } else {
     engine->candidates_nr = 0;
   }
   engine->candidates_nr += table_search(t9->items, t9->items_nr, keys, &wb, FALSE);
 
   log_debug("key=%s %d\n", keys, engine->candidates_nr);
-  if (engine->candidates_nr == 0) {
-    input_engine_reset_input(engine);
-  } else {
-    input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
+  if (engine->candidates_nr == 0 && keys_size > 1) {
+    engine->candidates_nr = 1;
+    wbuffer_write_string(&wb, keys);
   }
+  
+  input_method_dispatch_candidates(engine->im, engine->candidates, engine->candidates_nr);
 
   return RET_OK;
 }
@@ -144,3 +124,4 @@ ret_t input_engine_destroy(input_engine_t* engine) {
 }
 
 #endif /*WITH_IME_T9*/
+

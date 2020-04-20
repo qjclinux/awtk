@@ -36,8 +36,8 @@ GTEST_ROOT    = joinPath(TK_ROOT, '3rd/gtest/googletest')
 
 INPUT_ENGINE='null'
 INPUT_ENGINE='spinyin'
-#INPUT_ENGINE='t9'
-INPUT_ENGINE='t9ext'
+INPUT_ENGINE='t9'
+#INPUT_ENGINE='t9ext'
 #INPUT_ENGINE='pinyin'
 
 VGCANVAS='NANOVG'

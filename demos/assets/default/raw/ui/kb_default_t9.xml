@@ -59,19 +59,19 @@
     <view name="lower" lang="en_us" 
       x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
       <button repeat="300" name="," text=","/>
-        <button repeat="300" name="key:1" text="abc"/>
-        <button repeat="300" name="key:2" text="def"/>
+        <button repeat="300" name="key:2" text="abc"/>
+        <button repeat="300" name="key:3" text="def"/>
         <button repeat="300" name="key:backspace" style="highlight">
           <image draw_type="icon" image="backspace" x="center" y="middle" w="100%" h="100%"/>
         </button>
-        <button repeat="300" name="key:3" text="ghi"/>
-        <button repeat="300" name="key:4" text="jkl"/>
-        <button repeat="300" name="key:5" text="mno"/>
+        <button repeat="300" name="key:4" text="ghi"/>
+        <button repeat="300" name="key:5" text="jkl"/>
+        <button repeat="300" name="key:6" text="mno"/>
         <button name="page:upper" style="highlight" text="ABC"/>
 
-        <button repeat="300" name="key:6" text="pqrs"/>
-        <button repeat="300" name="key:7" text="tuv"/>
-        <button repeat="300" name="key:8" text="wxyz"/>
+        <button repeat="300" name="key:7" text="pqrs"/>
+        <button repeat="300" name="key:8" text="tuv"/>
+        <button repeat="300" name="key:9" text="wxyz"/>
         <button name="page:chinese" style="highlight">
           <image draw_type="icon" image="zh" x="center" y="middle" w="100%" h="100%"/>
         </button>
@@ -106,19 +106,19 @@
     <view name="chinese" lang="zh_cn" 
       x="0" y="0" w="100%" h="100%" children_layout="default(r=4,c=4,s=2,m=2)">
         <button repeat="300" name="，" text="，"/>
-        <button repeat="300" name="key:1" text="ABC"/>
-        <button repeat="300" name="key:2" text="DEF"/>
+        <button repeat="300" name="key:2" text="ABC"/>
+        <button repeat="300" name="key:3" text="DEF"/>
         <button repeat="300" name="key:backspace" style="highlight">
           <image draw_type="icon" image="backspace" x="center" y="middle" w="100%" h="100%"/>
         </button>
-        <button repeat="300" name="key:3" text="GHI"/>
-        <button repeat="300" name="key:4" text="JKL"/>
-        <button repeat="300" name="key:5" text="MNO"/>
+        <button repeat="300" name="key:4" text="GHI"/>
+        <button repeat="300" name="key:5" text="JKL"/>
+        <button repeat="300" name="key:6" text="MNO"/>
         <button name="page:lower" style="highlight" text="abc"/>
 
-        <button repeat="300" name="key:6" text="PQRS"/>
-        <button repeat="300" name="key:7" text="TUV"/>
-        <button repeat="300" name="key:8" text="WXYZ"/>
+        <button repeat="300" name="key:7" text="PQRS"/>
+        <button repeat="300" name="key:8" text="TUV"/>
+        <button repeat="300" name="key:9" text="WXYZ"/>
         <button name="page:symbols" style="highlight" text="#+="/>
         <button repeat="300" name="opt:。？！" text="。？！"/>
         <button repeat="300" name="space" text="Space"/>

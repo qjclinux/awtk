@@ -152,3 +152,26 @@ uint32_t table_search(const table_entry_t* items, uint32_t items_nr, const char*
 
   return nr;
 }
+
+ret_t input_engine_add_chars(wbuffer_t* wb, const wchar_t** table, char c) {
+  char str[8];
+  uint32_t n = 0;
+  const wchar_t* p = NULL;
+  uint32_t index = c - '0';
+  return_value_if_fail(index >= 0 && index <= 9, RET_BAD_PARAMS);
+
+  p = table[index];
+  while (*p) {
+    memset(str, 0x00, sizeof(str));
+    tk_utf8_from_utf16_ex(p, 1, str, sizeof(str));
+
+    if (wbuffer_write_string(wb, str) != RET_OK) {
+      break;
+    }
+    n++;
+    p++;
+  }
+
+  return n;
+}
+
